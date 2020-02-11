@@ -3,6 +3,7 @@
 
 # Object files
 *.o
+*.O # seems to be case sensitive?
 *.ko
 *.obj
 *.elf
@@ -31,6 +32,7 @@
 # Executables
 *.exe
 *.out
+*.OUT # seems to be case sensitive
 *.app
 *.i*86
 *.x86_64
