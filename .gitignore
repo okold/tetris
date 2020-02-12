@@ -1,3 +1,9 @@
+TETRIS
+A.OUT
+*.O
+MAKEFILE~
+makefile~
+
 # Prerequisites
 *.d
 
