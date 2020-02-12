@@ -1,8 +1,0 @@
-tetris: main.o
-	cc68x -g main.o -o tetris
-
-main.o: main.c
-	cc68x -g -c main.c main.o
-
-clean:
-    rm *.o tetris
