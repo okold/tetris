@@ -7,6 +7,11 @@
 
 #define BLOCK_HEIGHT 16
 
+#define PLAY_AREA_ROWS 24
+#define PLAY_AREA_COLS 10
+#define PLAY_AREA_OFFSET_X 60
+#define PLAY_AREA_OFFSET_Y 5
+
 typedef unsigned char UBYTE;
 typedef unsigned int  UWORD;
 typedef unsigned long ULONG;
@@ -49,7 +54,7 @@ int main()
 	
 	linea0();		   /* needs this, otherwise linea3() will crash the program */
 	
-	draw_play_area();
+	draw_play_area(PLAY_AREA_OFFSET_X, PLAY_AREA_OFFSET_Y, (PLAY_AREA_COLS * BLOCK_HEIGHT), (PLAY_AREA_ROWS * BLOCK_HEIGHT));
 	
 	/* test tiled blocks */
 	print_bitmap(base16,0,0,block_bitmap,BLOCK_HEIGHT);

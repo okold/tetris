@@ -18,80 +18,80 @@ void plot_line(unsigned short x1, unsigned short y1,
 }
 
 /* there might be a prettier way to do this idk */
-void draw_play_area()
+void draw_play_area(int x, int y, int width, int height)
 {
 	/* left border */
-	plot_line(PLAY_AREA_OFFSET_X - 8, PLAY_AREA_OFFSET_Y,
-	PLAY_AREA_OFFSET_X - 8, PLAY_AREA_OFFSET_Y + PLAY_AREA_HEIGHT_PIXELS + 1,
+	plot_line(x - 8, y,
+	x - 8, y + height + 1,
 	DASHED, XOR);
 	
-        plot_line(PLAY_AREA_OFFSET_X - 6, PLAY_AREA_OFFSET_Y,
-	PLAY_AREA_OFFSET_X - 6, PLAY_AREA_OFFSET_Y + PLAY_AREA_HEIGHT_PIXELS + 1,
+        plot_line(x - 6, y,
+	x - 6, y + height + 1,
 	DASHED2, XOR);
 	
-	plot_line(PLAY_AREA_OFFSET_X - 5, PLAY_AREA_OFFSET_Y,
-	PLAY_AREA_OFFSET_X - 5, PLAY_AREA_OFFSET_Y + PLAY_AREA_HEIGHT_PIXELS + 1,
+	plot_line(x - 5, y,
+	x - 5, y + height + 1,
 	DASHED, XOR);
 
-	plot_line(PLAY_AREA_OFFSET_X - 4, PLAY_AREA_OFFSET_Y,
-	PLAY_AREA_OFFSET_X - 4, PLAY_AREA_OFFSET_Y + PLAY_AREA_HEIGHT_PIXELS + 1,
+	plot_line(x - 4, y,
+	x - 4, y + height + 1,
 	DASHED2, XOR);
 	
-	plot_line(PLAY_AREA_OFFSET_X - 3, PLAY_AREA_OFFSET_Y,
-	PLAY_AREA_OFFSET_X - 3, PLAY_AREA_OFFSET_Y + PLAY_AREA_HEIGHT_PIXELS + 1,
+	plot_line(x - 3, y,
+	x - 3, y + height + 1,
 	DASHED, XOR);
 
-	plot_line(PLAY_AREA_OFFSET_X - 2, PLAY_AREA_OFFSET_Y,
-	PLAY_AREA_OFFSET_X - 2, PLAY_AREA_OFFSET_Y + PLAY_AREA_HEIGHT_PIXELS + 1,
+	plot_line(x - 2, y,
+	x - 2, y + height + 1,
 	SOLID, XOR);
 	
-	plot_line(PLAY_AREA_OFFSET_X - 1, PLAY_AREA_OFFSET_Y,
-	PLAY_AREA_OFFSET_X - 1, PLAY_AREA_OFFSET_Y + PLAY_AREA_HEIGHT_PIXELS + 1,
+	plot_line(x - 1, y,
+	x - 1, y + height + 1,
 	SOLID, XOR);
 	
 	/* right border */
-	plot_line(PLAY_AREA_OFFSET_X + PLAY_AREA_WIDTH_PIXELS + 1, PLAY_AREA_OFFSET_Y,
-	PLAY_AREA_OFFSET_X + PLAY_AREA_WIDTH_PIXELS + 1, PLAY_AREA_OFFSET_Y + PLAY_AREA_HEIGHT_PIXELS + 1,
+	plot_line(x + width + 1, y,
+	x + width + 1, y + height + 1,
 	SOLID, XOR);
 	
-	plot_line(PLAY_AREA_OFFSET_X + PLAY_AREA_WIDTH_PIXELS + 2, PLAY_AREA_OFFSET_Y,
-	PLAY_AREA_OFFSET_X + PLAY_AREA_WIDTH_PIXELS + 2, PLAY_AREA_OFFSET_Y + PLAY_AREA_HEIGHT_PIXELS + 1,
+	plot_line(x + width + 2, y,
+	x + width + 2, y + height + 1,
 	SOLID, XOR);
 	
-	plot_line(PLAY_AREA_OFFSET_X + PLAY_AREA_WIDTH_PIXELS + 3, PLAY_AREA_OFFSET_Y,
-	PLAY_AREA_OFFSET_X + PLAY_AREA_WIDTH_PIXELS + 3, PLAY_AREA_OFFSET_Y + PLAY_AREA_HEIGHT_PIXELS + 1,
+	plot_line(x + width + 3, y,
+	x + width + 3, y + height + 1,
 	DASHED, XOR);
 	
-	plot_line(PLAY_AREA_OFFSET_X + PLAY_AREA_WIDTH_PIXELS + 4, PLAY_AREA_OFFSET_Y,
-	PLAY_AREA_OFFSET_X + PLAY_AREA_WIDTH_PIXELS + 4, PLAY_AREA_OFFSET_Y + PLAY_AREA_HEIGHT_PIXELS + 1,
+	plot_line(x + width + 4, y,
+	x + width + 4, y + height + 1,
 	DASHED2, XOR);
 
-	plot_line(PLAY_AREA_OFFSET_X + PLAY_AREA_WIDTH_PIXELS + 5, PLAY_AREA_OFFSET_Y,
-	PLAY_AREA_OFFSET_X + PLAY_AREA_WIDTH_PIXELS + 5, PLAY_AREA_OFFSET_Y + PLAY_AREA_HEIGHT_PIXELS + 1,
+	plot_line(x + width + 5, y,
+	x + width + 5, y + height + 1,
 	DASHED, XOR);
 	
-	plot_line(PLAY_AREA_OFFSET_X + PLAY_AREA_WIDTH_PIXELS + 6, PLAY_AREA_OFFSET_Y,
-	PLAY_AREA_OFFSET_X + PLAY_AREA_WIDTH_PIXELS + 6, PLAY_AREA_OFFSET_Y + PLAY_AREA_HEIGHT_PIXELS + 1,
+	plot_line(x + width + 6, y,
+	x + width + 6, y + height + 1,
 	DASHED2, XOR);
 	
-	plot_line(PLAY_AREA_OFFSET_X + PLAY_AREA_WIDTH_PIXELS + 8, PLAY_AREA_OFFSET_Y,
-	PLAY_AREA_OFFSET_X + PLAY_AREA_WIDTH_PIXELS + 8, PLAY_AREA_OFFSET_Y + PLAY_AREA_HEIGHT_PIXELS + 1,
+	plot_line(x + width + 8, y,
+	x + width + 8, y + height + 1,
 	DASHED, XOR);
 
 	/* bottom border */
-	plot_line(PLAY_AREA_OFFSET_X - 8, PLAY_AREA_OFFSET_Y + PLAY_AREA_HEIGHT_PIXELS + 1,
-	PLAY_AREA_OFFSET_X + PLAY_AREA_WIDTH_PIXELS + 8, PLAY_AREA_OFFSET_Y + PLAY_AREA_HEIGHT_PIXELS + 1,
+	plot_line(x - 8, y + height + 1,
+	x + width + 9, y + height + 1,
 	SOLID, XOR);
 	
-	plot_line(PLAY_AREA_OFFSET_X - 8, PLAY_AREA_OFFSET_Y + PLAY_AREA_HEIGHT_PIXELS + 2,
-	PLAY_AREA_OFFSET_X + PLAY_AREA_WIDTH_PIXELS + 8, PLAY_AREA_OFFSET_Y + PLAY_AREA_HEIGHT_PIXELS + 2,
+	plot_line(x - 8, y + height + 2,
+	x + width + 9, y + height + 2,
 	SOLID, XOR);
 	
-	plot_line(PLAY_AREA_OFFSET_X - 8, PLAY_AREA_OFFSET_Y + PLAY_AREA_HEIGHT_PIXELS + 3,
-	PLAY_AREA_OFFSET_X + PLAY_AREA_WIDTH_PIXELS + 8, PLAY_AREA_OFFSET_Y + PLAY_AREA_HEIGHT_PIXELS + 3,
+	plot_line(x - 8, y + height + 3,
+	x + width + 9, y + height + 3,
 	DASHED, XOR);
 	
-	plot_line(PLAY_AREA_OFFSET_X - 8, PLAY_AREA_OFFSET_Y + PLAY_AREA_HEIGHT_PIXELS + 4,
-	PLAY_AREA_OFFSET_X + PLAY_AREA_WIDTH_PIXELS + 8, PLAY_AREA_OFFSET_Y + PLAY_AREA_HEIGHT_PIXELS + 4,
+	plot_line(x - 8, y + height + 4,
+	x + width + 9, y + height + 4,
 	DASHED2, XOR);
 }
