@@ -12,6 +12,11 @@
 #define PLAY_AREA_OFFSET_X 60
 #define PLAY_AREA_OFFSET_Y 5
 
+#define SCORE_BOX_HEIGHT 144
+#define SCORE_BOX_WIDTH 96
+#define SCORE_BOX_OFFSET_X 250
+#define SCORE_BOX_OFFSET_Y 10
+
 typedef unsigned char UBYTE;
 typedef unsigned int  UWORD;
 typedef unsigned long ULONG;
@@ -24,7 +29,7 @@ void print_bitmap(UWORD *base, int x, int y,
 
 int main()
 {
-	UWORD block_bitmap[BLOCK_HEIGHT] = 
+	UWORD block_bitmap[BLOCK_HEIGHT] =
 	{
 		0x8001,
 		0x4003,
@@ -51,11 +56,11 @@ int main()
 	disable_cursor();          /* hide blinking text cursor */
 
 	fill_screen(base32, -1);     /* set screen to all black */
-	
+
 	linea0();		   /* needs this, otherwise linea3() will crash the program */
-	
+
 	draw_play_area(PLAY_AREA_OFFSET_X, PLAY_AREA_OFFSET_Y, (PLAY_AREA_COLS * BLOCK_HEIGHT), (PLAY_AREA_ROWS * BLOCK_HEIGHT));
-	
+	draw_score_box(SCORE_BOX_OFFSET_X, SCORE_BOX_OFFSET_Y, SCORE_BOX_WIDTH, SCORE_BOX_HEIGHT);
 	/* test tiled blocks */
 	print_bitmap(base16,0,0,block_bitmap,BLOCK_HEIGHT);
 	print_bitmap(base16,16,0,block_bitmap,BLOCK_HEIGHT);
@@ -98,5 +103,5 @@ void print_bitmap(UWORD *base, int x, int y,
 	for (i = 0; i < height; i++)
 	{
 		*(base + offset + (40*i)) &= bitmap[i];
-	}		
+	}
 }
