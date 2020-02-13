@@ -1,12 +1,17 @@
-tetris: main.o drawlib.o
-	cc68x -g main.o drawlib.o -o tetris
+PROGNAME = tetris
+
+CC = cc68x
+
+OBJ = main.o drawlib.o
+
+$(PROGNAME): $(OBJ)
+	$(CC) -g $(OBJ) -o $(PROGNAME)
 
 main.o: main.c drawlib.h
-	cc68x -g -c main.c
+	$(CC) -g -c main.c
 
 drawlib.o: drawlib.c drawlib.h
-	cc68x -g -c drawlib.c
+	$(CC) -g -c drawlib.c
 
-# this works in my terminal but not in gulam because gulam is stupid
 clean:
-	rm *.O TETRIS
+	!rm $(OBJ) $(PROGNAME)
