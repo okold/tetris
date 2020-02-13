@@ -98,29 +98,94 @@ void draw_play_area(int x, int y, int width, int height)
 
 void draw_score_box(int x, int y, int width, int height)
 {
-  /* Draw top border */
+  /* -Draw top border- */
+  /* Inner Bound */
   plot_line(x, y,
 	x + width, y,
 	SOLID, XOR);
-
-  /*
+  /* Diagonals */
   plot_line(x - 1, y - 1,
-	x -1, y - 1,
+	x - 1, y - 1,
 	SOLID, XOR);
-  */
-  
-  /* Draw left border */
-  plot_line(x, y + 1,
-	x, y + height - 1,
+  plot_line(x + width + 1, y - 1,
+	x + width + 1, y - 1,
+	SOLID, XOR);
+  plot_line(x - 2, y - 2,
+	x - 2, y - 2,
+	SOLID, XOR);
+  plot_line(x + width + 2, y - 2,
+	x + width + 2, y - 2,
+	SOLID, XOR);
+  plot_line(x - 3, y - 3,
+	x -3, y - 3,
+	SOLID, XOR);
+  plot_line(x + width + 3, y - 3,
+	x + width + 3, y - 3,
+	SOLID, XOR);
+  plot_line(x - 4, y - 4,
+	x - 4, y - 4,
+	SOLID, XOR);
+  plot_line(x + width + 4, y - 4,
+	x + width + 4, y - 4,
+	SOLID, XOR);
+  /* Outer Bound */
+  plot_line(x - 5, y - 5,
+	x + width + 5, y - 5,
 	SOLID, XOR);
 
-  /* Draw right border */
-  plot_line(x + width - 1 , y + 1,
-	x + width - 1, y + height - 1,
+  /* -Draw left border- */
+  /* Inner Bound */
+  plot_line(x, y,
+	x, y + height,
+	SOLID, XOR);
+  /* Outer Bound */
+  plot_line(x - 5, y - 5,
+	x - 5, y + height + 5,
 	SOLID, XOR);
 
-  /* Draw bottom border */
-  plot_line(x, y + height - 1,
-	x + width, y + height - 1,
+  /* -Draw right border- */
+  /* Inner Bound */
+  plot_line(x + width, y,
+	x + width, y + height,
+	SOLID, XOR);
+  /* Fill */
+  plot_line(x + width + 1, y - 1,
+	x + width + 1, y + height + 1,
+	SOLID, XOR);
+  plot_line(x + width + 2, y - 2,
+	x + width + 2, y + height + 2,
+	SOLID, XOR);
+  plot_line(x + width + 3, y - 3,
+	x + width + 3, y + height + 3,
+	SOLID, XOR);
+  plot_line(x + width + 4, y - 4,
+	x + width + 4, y + height + 4,
+	SOLID, XOR);
+  /*Outer Bound*/
+  plot_line(x + width + 5, y - 5,
+	x + width + 5, y + height + 5,
+	SOLID, XOR);
+
+  /* -Draw bottom border- */
+  /* Inner Bound */
+  plot_line(x, y + height,
+	x + width, y + height,
+	SOLID, XOR);
+  /* Fill */
+  plot_line(x - 1, y + height + 1,
+	x + width + 1, y + height + 1,
+	SOLID, XOR);
+  plot_line(x - 2, y + height + 2,
+	x + width + 2, y + height + 2,
+	SOLID, XOR);
+  plot_line(x - 3, y + height + 3,
+	x + width + 3, y + height + 3,
+	SOLID, XOR);
+  plot_line(x - 4, y + height + 4,
+	x + width + 4, y + height + 4,
+	SOLID, XOR);
+  /* OuterBound */
+  plot_line(x - 5, y + height + 5,
+	x + width + 5, y + height + 5,
 	SOLID, XOR);
 }
