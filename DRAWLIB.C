@@ -42,18 +42,61 @@ void draw_block(UWORD *base, int x, int y)
 		0x7FFD,
 		0xFFFE
 	};
-	draw_bitmap(base, x, y, block_bitmap, 16);	
+	draw_bitmap(base, x, y, block_bitmap, 16, AND);	
+}
+
+void draw_blank_block(UWORD *base, int x, int y)
+{
+	static const UWORD black_bitmap[16] =
+	{
+		0xFFFF,
+		0xFFFF,
+		0xFFFF,
+		0xFFFF,
+		0xFFFF,
+		0xFFFF,
+		0xFFFF,
+		0xFFFF,
+		0xFFFF,
+		0xFFFF,
+		0xFFFF,
+		0xFFFF,
+		0xFFFF,
+		0xFFFF,
+		0xFFFF,
+		0xFFFF
+	};
+
+	draw_bitmap(base, x, y, black_bitmap, 16, OR);
 }
 
 void draw_bitmap(UWORD *base, int x, int y,
-				  const UWORD *bitmap, unsigned int height)
+				  const UWORD *bitmap, unsigned int height, short mode)
 {
 	int i;
 	int offset;
 	offset = (x>>4) + (y*40);
-	for (i = 0; i < height; i++)
+
+	if (mode == AND)
 	{
+		for (i = 0; i < height; i++)
+		{
 		*(base + offset + (40*i)) &= bitmap[i];
+		}
+	}
+	else if (mode == OR)
+	{
+		for (i = 0; i < height; i++)
+		{
+			*(base + offset + (40*i)) |= bitmap[i];
+		}
+	}
+	else if (mode == XOR)
+	{
+		for (i = 0; i < height; i++)
+		{
+			*(base + offset + (40*i)) ^= bitmap[i];
+		}
 	}
 }
 

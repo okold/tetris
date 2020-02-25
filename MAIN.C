@@ -19,6 +19,8 @@ void print_bitmap(UWORD *base, int x, int y,
 
 int main()
 {
+	int y = 0;
+
 	UBYTE *base8 = Physbase();
 	UWORD *base16 = Physbase();
 	ULONG *base32 = Physbase();
@@ -33,6 +35,18 @@ int main()
 	draw_score_box(SCORE_BOX_OFFSET_X, SCORE_BOX_OFFSET_Y, SCORE_BOX_WIDTH, SCORE_BOX_HEIGHT);
 	/* test tiled blocks */
 	draw_block(base16, 0, 0);
+	draw_block(base16, 8, 8);
+
+	while (!Cconis())     /* repeat until key press... */
+	{
+		Vsync();
+		draw_blank_block(base16,0,y);
+		y++;				      /* move down */
+		draw_block(base16,0,y);
+		
+		if (y == 400)
+			y = 0;
+	}
 
 	Cnecin();                  /* wait for key press */
 

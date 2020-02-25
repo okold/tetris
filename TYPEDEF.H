@@ -7,6 +7,8 @@
 #define SOLID 0xFFFF
 #define DASHED 0xCCCC
 #define DASHED2 0x3333
+#define AND   0
+#define OR    1
 #define XOR   2
 
 typedef unsigned char UBYTE;
