@@ -1,5 +1,9 @@
 #include <linea.h>
+#include <osbind.h>
+#include <stdio.h>
 #include "drawlib.h"
+#include "typedef.h"
+
 
 void plot_line(unsigned short x1, unsigned short y1,
                unsigned short x2, unsigned short y2,
@@ -15,6 +19,57 @@ void plot_line(unsigned short x1, unsigned short y1,
 	WMODE = mode;
 	LSTLIN = 0;
 	linea3();
+}
+
+void draw_block(UWORD *base, int x, int y)
+{
+	static const UWORD block_bitmap[16] =
+	{
+		0x8001,
+		0x4003,
+		0x2007,
+		0x1FFF,
+		0x100F,
+		0x100F,
+		0x100F,
+		0x100F,
+		0x100F,
+		0x100F,
+		0x100F,
+		0x100F,
+		0x1FF7,
+		0x3FFB,
+		0x7FFD,
+		0xFFFE
+	};
+	draw_bitmap(base, x, y, block_bitmap, 16);	
+}
+
+void draw_bitmap(UWORD *base, int x, int y,
+				  const UWORD *bitmap, unsigned int height)
+{
+	int i;
+	int offset;
+	offset = (x>>4) + (y*40);
+	for (i = 0; i < height; i++)
+	{
+		*(base + offset + (40*i)) &= bitmap[i];
+	}
+}
+
+void fill_screen(ULONG *base, char pattern)
+{
+	register int i = 0;
+	register ULONG *loc = base;
+
+	while (i++ < BYTES_PER_SCREEN)
+		*(loc++) = pattern;
+}
+
+void disable_cursor()
+{
+	printf("\033f"); /* i still don't get what this does */
+	fflush(stdout);
 }
 
 /* there might be a prettier way to do this idk */
