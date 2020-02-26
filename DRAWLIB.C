@@ -94,27 +94,27 @@ void draw_game_start(UWORD *base)
 	};
 
 	for(i = 0; i < 25; i++) {
-		draw_bitmap(base,16,i*16,border_block_bitmap,16,AND);
+		draw_bitmap(base,12*16,i*16,border_block_bitmap,16,AND);
 	}
 
 	for(i = 1; i < 13; i++) {
-		draw_bitmap(base,i*16,24*16,border_block_bitmap,16,AND);
+		draw_bitmap(base,(i+12)*16,24*16,border_block_bitmap,16,AND);
 	}
 
 	for(i = 24; i > -1; i--) {
-		draw_bitmap(base,12*16,i*16,border_block_bitmap,16,AND);
+		draw_bitmap(base,(12+12)*16,i*16,border_block_bitmap,16,AND);
 	}
 	
 	for(i = 12; i < 21; i++) {
-		draw_bitmap(base,i*16,0,border_block_bitmap,16,AND);
+		draw_bitmap(base,(12+i)*16,0,border_block_bitmap,16,AND);
 	}
 
 	for(i = 0; i < 12; i++) {
-		draw_bitmap(base,20*16,i*16,border_block_bitmap,16,AND);
+		draw_bitmap(base,(12+20)*16,i*16,border_block_bitmap,16,AND);
 	}
 
 	for(i = 20; i > 12; i--) {
-		draw_bitmap(base,i*16,11*16,border_block_bitmap,16,AND);
+		draw_bitmap(base,(12+i)*16,11*16,border_block_bitmap,16,AND);
 	}
 }
 
