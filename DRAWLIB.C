@@ -70,6 +70,54 @@ void draw_blank_block(UWORD *base, int x, int y)
 	draw_bitmap(base, x, y, black_bitmap, 16, OR);
 }
 
+void draw_game_start(UWORD *base)
+{
+	int i;
+	static const UWORD border_block_bitmap[16] =
+	{
+		0x0000,
+		0x7FFE,
+		0x4002,
+		0x4002,
+		0x401A,
+		0x4016,
+		0x401A,
+		0x4016,
+		0x401A,
+		0x4016,
+		0x4FFA,
+		0x5556,
+		0x6AAA,
+		0x5556,
+		0x7FFE,
+		0x0000,
+	};
+
+	for(i = 0; i < 25; i++) {
+		draw_bitmap(base,16,i*16,border_block_bitmap,16,AND);
+	}
+
+	for(i = 1; i < 13; i++) {
+		draw_bitmap(base,i*16,24*16,border_block_bitmap,16,AND);
+	}
+
+	for(i = 24; i > -1; i--) {
+		draw_bitmap(base,12*16,i*16,border_block_bitmap,16,AND);
+	}
+	
+	for(i = 12; i < 21; i++) {
+		draw_bitmap(base,i*16,0,border_block_bitmap,16,AND);
+	}
+
+	for(i = 0; i < 12; i++) {
+		draw_bitmap(base,20*16,i*16,border_block_bitmap,16,AND);
+	}
+
+	for(i = 20; i > 12; i--) {
+		draw_bitmap(base,i*16,11*16,border_block_bitmap,16,AND);
+	}
+}
+
 void draw_bitmap(UWORD *base, int x, int y,
 				  const UWORD *bitmap, unsigned int height, short mode)
 {
@@ -113,177 +161,4 @@ void disable_cursor()
 {
 	printf("\033f"); /* i still don't get what this does */
 	fflush(stdout);
-}
-
-/* there might be a prettier way to do this idk */
-void draw_play_area(int x, int y, int width, int height)
-{
-	/* left border */
-	plot_line(x - 8, y,
-	x - 8, y + height + 1,
-	DASHED, XOR);
-
-  plot_line(x - 6, y,
-	x - 6, y + height + 1,
-	DASHED2, XOR);
-
-	plot_line(x - 5, y,
-	x - 5, y + height + 1,
-	DASHED, XOR);
-
-	plot_line(x - 4, y,
-	x - 4, y + height + 1,
-	DASHED2, XOR);
-
-	plot_line(x - 3, y,
-	x - 3, y + height + 1,
-	DASHED, XOR);
-
-	plot_line(x - 2, y,
-	x - 2, y + height + 1,
-	SOLID, XOR);
-
-	plot_line(x - 1, y,
-	x - 1, y + height + 1,
-	SOLID, XOR);
-
-	/* right border */
-	plot_line(x + width + 1, y,
-	x + width + 1, y + height + 1,
-	SOLID, XOR);
-
-	plot_line(x + width + 2, y,
-	x + width + 2, y + height + 1,
-	SOLID, XOR);
-
-	plot_line(x + width + 3, y,
-	x + width + 3, y + height + 1,
-	DASHED, XOR);
-
-	plot_line(x + width + 4, y,
-	x + width + 4, y + height + 1,
-	DASHED2, XOR);
-
-	plot_line(x + width + 5, y,
-	x + width + 5, y + height + 1,
-	DASHED, XOR);
-
-	plot_line(x + width + 6, y,
-	x + width + 6, y + height + 1,
-	DASHED2, XOR);
-
-	plot_line(x + width + 8, y,
-	x + width + 8, y + height + 1,
-	DASHED, XOR);
-
-	/* bottom border */
-	plot_line(x - 8, y + height + 1,
-	x + width + 9, y + height + 1,
-	SOLID, XOR);
-
-	plot_line(x - 8, y + height + 2,
-	x + width + 9, y + height + 2,
-	SOLID, XOR);
-
-	plot_line(x - 8, y + height + 3,
-	x + width + 9, y + height + 3,
-	DASHED, XOR);
-
-	plot_line(x - 8, y + height + 4,
-	x + width + 9, y + height + 4,
-	DASHED2, XOR);
-}
-
-void draw_score_box(int x, int y, int width, int height)
-{
-  /* -Draw top border- */
-  /* Inner Bound */
-  plot_line(x, y,
-	x + width, y,
-	SOLID, XOR);
-  /* Diagonals */
-  plot_line(x - 1, y - 1,
-	x - 1, y - 1,
-	SOLID, XOR);
-  plot_line(x + width + 1, y - 1,
-	x + width + 1, y - 1,
-	SOLID, XOR);
-  plot_line(x - 2, y - 2,
-	x - 2, y - 2,
-	SOLID, XOR);
-  plot_line(x + width + 2, y - 2,
-	x + width + 2, y - 2,
-	SOLID, XOR);
-  plot_line(x - 3, y - 3,
-	x -3, y - 3,
-	SOLID, XOR);
-  plot_line(x + width + 3, y - 3,
-	x + width + 3, y - 3,
-	SOLID, XOR);
-  plot_line(x - 4, y - 4,
-	x - 4, y - 4,
-	SOLID, XOR);
-  plot_line(x + width + 4, y - 4,
-	x + width + 4, y - 4,
-	SOLID, XOR);
-  /* Outer Bound */
-  plot_line(x - 5, y - 5,
-	x + width + 5, y - 5,
-	SOLID, XOR);
-
-  /* -Draw left border- */
-  /* Inner Bound */
-  plot_line(x, y,
-	x, y + height,
-	SOLID, XOR);
-  /* Outer Bound */
-  plot_line(x - 5, y - 5,
-	x - 5, y + height + 5,
-	SOLID, XOR);
-
-  /* -Draw right border- */
-  /* Inner Bound */
-  plot_line(x + width, y,
-	x + width, y + height,
-	SOLID, XOR);
-  /* Fill */
-  plot_line(x + width + 1, y - 1,
-	x + width + 1, y + height + 1,
-	SOLID, XOR);
-  plot_line(x + width + 2, y - 2,
-	x + width + 2, y + height + 2,
-	SOLID, XOR);
-  plot_line(x + width + 3, y - 3,
-	x + width + 3, y + height + 3,
-	SOLID, XOR);
-  plot_line(x + width + 4, y - 4,
-	x + width + 4, y + height + 4,
-	SOLID, XOR);
-  /*Outer Bound*/
-  plot_line(x + width + 5, y - 5,
-	x + width + 5, y + height + 5,
-	SOLID, XOR);
-
-  /* -Draw bottom border- */
-  /* Inner Bound */
-  plot_line(x, y + height,
-	x + width, y + height,
-	SOLID, XOR);
-  /* Fill */
-  plot_line(x - 1, y + height + 1,
-	x + width + 1, y + height + 1,
-	SOLID, XOR);
-  plot_line(x - 2, y + height + 2,
-	x + width + 2, y + height + 2,
-	SOLID, XOR);
-  plot_line(x - 3, y + height + 3,
-	x + width + 3, y + height + 3,
-	SOLID, XOR);
-  plot_line(x - 4, y + height + 4,
-	x + width + 4, y + height + 4,
-	SOLID, XOR);
-  /* OuterBound */
-  plot_line(x - 5, y + height + 5,
-	x + width + 5, y + height + 5,
-	SOLID, XOR);
 }
