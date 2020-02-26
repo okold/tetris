@@ -90,7 +90,227 @@ void draw_game_start(UWORD *base)
 		0x6AAA,
 		0x5556,
 		0x7FFE,
+		0x0000
+	};
+
+	static const UWORD zero_bitmap[16] =
+	{
 		0x0000,
+		0x0000,
+		0x0FF0,
+		0x0FF0,
+		0x3C3C,
+		0x3C3C,
+		0x3C3C,
+		0x3C3C,
+		0x3C3C,
+		0x3C3C,
+		0x3C3C,
+		0x3C3C,
+		0x0FF0,
+		0x0FF0,
+		0x0000,
+		0x0000
+	};
+
+	static const UWORD s_bitmap[16] =
+	{
+		0x0000,
+		0x0000,
+		0x0FF0,
+		0x0FF0,
+		0x3C00,
+		0x3C00,
+		0x0FF0,
+		0x0FF0,
+		0x00FF,
+		0x00FF,
+		0x30FC,
+		0x30FC,
+		0x0FF0,
+		0x0FF0,
+		0x0000,
+		0x0000
+	};
+
+	static const UWORD c_bitmap[16] =
+	{
+		0x0000,
+		0x0000,
+		0x0FF0,
+		0x0FF0,
+		0x3C3C,
+		0x3C3C,
+		0x3C00,
+		0x3C00,
+		0x3C00,
+		0x3C00,
+		0x3C3C,
+		0x3C3C,
+		0x0FF0,
+		0x0FF0,
+		0x0000,
+		0x0000
+	};
+
+	static const UWORD r_bitmap[16] =
+	{
+		0x0000,
+		0x0000,
+		0x3FF0,
+		0x3FF0,
+		0x3C3C,
+		0x3C3C,
+		0x3C3C,
+		0x3C3C,
+		0x3FF0,
+		0x3FF0,
+		0x3CC0,
+		0x3CC0,
+		0x3C3C,
+		0x3C3C,
+		0x0000,
+		0x0000
+	};
+
+	static const UWORD e_bitmap[16] =
+	{
+		0x0000,
+		0x0000,
+		0x3FFC,
+		0x3FFC,
+		0x3000,
+		0x3000,
+		0x3FF0,
+		0x3FF0,
+		0x3000,
+		0x3000,
+		0x3000,
+		0x3000,
+		0x3FFC,
+		0x3FFC,
+		0x0000,
+		0x0000
+	};
+
+	static const UWORD l_bitmap[16] =
+	{
+		0x0000,
+		0x0000,
+		0x3C00,
+		0x3C00,
+		0x3C00,
+		0x3C00,
+		0x3C00,
+		0x3C00,
+		0x3C00,
+		0x3C00,
+		0x3C00,
+		0x3C00,
+		0x3FFC,
+		0x3FFC,
+		0x0000,
+		0x0000
+	};
+
+	static const UWORD i_bitmap[16] =
+	{
+		0x0000,
+		0x0000,
+		0x0FF0,
+		0x0FF0,
+		0x03C0,
+		0x03C0,
+		0x03C0,
+		0x03C0,
+		0x03C0,
+		0x03C0,
+		0x03C0,
+		0x03C0,
+		0x0FF0,
+		0x0FF0,
+		0x0000,
+		0x0000
+	};
+
+	static const UWORD n_bitmap[16] =
+	{
+		0x0000,
+		0x0000,
+		0x303C,
+		0x303C,
+		0x3C3C,
+		0x3C3C,
+		0x3F3C,
+		0x3F3C,
+		0x33FC,
+		0x33FC,
+		0x30FC,
+		0x30FC,
+		0x303C,
+		0x303C,
+		0x0000,
+		0x0000
+	};
+
+	static const UWORD x_bitmap[16] =
+	{
+		0x0000,
+		0x0000,
+		0x303C,
+		0x303C,
+		0x0CF0,
+		0x0CF0,
+		0x03C0,
+		0x03C0,
+		0x0FC0,
+		0x0FC0,
+		0x3C30,
+		0x3C30,
+		0x300C,
+		0x300C,
+		0x0000,
+		0x0000
+	};
+
+	static const UWORD t_bitmap[16] =
+	{
+		0x0000,
+		0x0000,
+		0x3FFC,
+		0x3FFC,
+		0x03C0,
+		0x03C0,
+		0x03C0,
+		0x03C0,
+		0x03C0,
+		0x03C0,
+		0x03C0,
+		0x03C0,
+		0x03C0,
+		0x03C0,
+		0x0000,
+		0x0000
+	};
+
+	static const UWORD colon_bitmap[16] =
+	{
+		0x0000,
+		0x0000,
+		0x0000,
+		0x0000,
+		0x3800,
+		0x3800,
+		0x3800,
+		0x0000,
+		0x0000,
+		0x3800,
+		0x3800,
+		0x3800,
+		0x0000,
+		0x0000,
+		0x0000,
+		0x0000
 	};
 
 	for(i = 0; i < 25; i++) {
@@ -116,6 +336,36 @@ void draw_game_start(UWORD *base)
 	for(i = 20; i > 12; i--) {
 		draw_bitmap(base,(12+i)*16,11*16,border_block_bitmap,16,AND);
 	}
+
+	draw_bitmap(base,25*16,1*16,s_bitmap,16,XOR);
+	draw_bitmap(base,26*16,1*16,c_bitmap,16,XOR);
+	draw_bitmap(base,27*16,1*16,zero_bitmap,16,XOR);
+	draw_bitmap(base,28*16,1*16,r_bitmap,16,XOR);
+	draw_bitmap(base,29*16,1*16,e_bitmap,16,XOR);
+	draw_bitmap(base,30*16,1*16,colon_bitmap,16,XOR);
+
+	draw_bitmap(base,27*16,2*16,zero_bitmap,16,XOR);
+	draw_bitmap(base,28*16,2*16,zero_bitmap,16,XOR);
+	draw_bitmap(base,29*16,2*16,zero_bitmap,16,XOR);
+	draw_bitmap(base,30*16,2*16,zero_bitmap,16,XOR);
+	draw_bitmap(base,31*16,2*16,zero_bitmap,16,XOR);
+
+	draw_bitmap(base,25*16,3*16,l_bitmap,16,XOR);
+	draw_bitmap(base,26*16,3*16,i_bitmap,16,XOR);
+	draw_bitmap(base,27*16,3*16,n_bitmap,16,XOR);
+	draw_bitmap(base,28*16,3*16,e_bitmap,16,XOR);
+	draw_bitmap(base,29*16,3*16,s_bitmap,16,XOR);
+	draw_bitmap(base,30*16,3*16,colon_bitmap,16,XOR);
+
+	draw_bitmap(base,29*16,4*16,zero_bitmap,16,XOR);
+	draw_bitmap(base,30*16,4*16,zero_bitmap,16,XOR);
+	draw_bitmap(base,31*16,4*16,zero_bitmap,16,XOR);
+
+	draw_bitmap(base,25*16,5*16,n_bitmap,16,XOR);
+	draw_bitmap(base,26*16,5*16,e_bitmap,16,XOR);
+	draw_bitmap(base,27*16,5*16,x_bitmap,16,XOR);
+	draw_bitmap(base,28*16,5*16,t_bitmap,16,XOR);
+	draw_bitmap(base,29*16,5*16,colon_bitmap,16,XOR);
 }
 
 void draw_bitmap(UWORD *base, int x, int y,
