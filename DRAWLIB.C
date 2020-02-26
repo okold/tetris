@@ -70,9 +70,8 @@ void draw_blank_block(UWORD *base, int x, int y)
 	draw_bitmap(base, x, y, black_bitmap, 16, OR);
 }
 
-void draw_game_start(UWORD *base)
+void border_block(UWORD *base, int x, int y)
 {
-	int i;
 	static const UWORD border_block_bitmap[16] =
 	{
 		0x0000,
@@ -93,6 +92,11 @@ void draw_game_start(UWORD *base)
 		0x0000
 	};
 
+	draw_bitmap(base, x, y, border_block_bitmap, 16, AND);
+}
+
+void num_zero(UWORD *base, int x, int y)
+{
 	static const UWORD zero_bitmap[16] =
 	{
 		0x0000,
@@ -113,26 +117,11 @@ void draw_game_start(UWORD *base)
 		0x0000
 	};
 
-	static const UWORD s_bitmap[16] =
-	{
-		0x0000,
-		0x0000,
-		0x0FF0,
-		0x0FF0,
-		0x3C00,
-		0x3C00,
-		0x0FF0,
-		0x0FF0,
-		0x00FF,
-		0x00FF,
-		0x30FC,
-		0x30FC,
-		0x0FF0,
-		0x0FF0,
-		0x0000,
-		0x0000
-	};
+	draw_bitmap(base, x, y, zero_bitmap, 16, XOR);
+}
 
+void write_c(UWORD *base, int x, int y)
+{
 	static const UWORD c_bitmap[16] =
 	{
 		0x0000,
@@ -153,26 +142,11 @@ void draw_game_start(UWORD *base)
 		0x0000
 	};
 
-	static const UWORD r_bitmap[16] =
-	{
-		0x0000,
-		0x0000,
-		0x3FF0,
-		0x3FF0,
-		0x3C3C,
-		0x3C3C,
-		0x3C3C,
-		0x3C3C,
-		0x3FF0,
-		0x3FF0,
-		0x3CC0,
-		0x3CC0,
-		0x3C3C,
-		0x3C3C,
-		0x0000,
-		0x0000
-	};
+	draw_bitmap(base, x, y, c_bitmap, 16, XOR);
+}
 
+void write_e(UWORD *base, int x, int y)
+{
 	static const UWORD e_bitmap[16] =
 	{
 		0x0000,
@@ -193,26 +167,11 @@ void draw_game_start(UWORD *base)
 		0x0000
 	};
 
-	static const UWORD l_bitmap[16] =
-	{
-		0x0000,
-		0x0000,
-		0x3C00,
-		0x3C00,
-		0x3C00,
-		0x3C00,
-		0x3C00,
-		0x3C00,
-		0x3C00,
-		0x3C00,
-		0x3C00,
-		0x3C00,
-		0x3FFC,
-		0x3FFC,
-		0x0000,
-		0x0000
-	};
+	draw_bitmap(base, x, y, e_bitmap, 16, XOR);
+}
 
+void write_i(UWORD *base, int x, int y)
+{
 	static const UWORD i_bitmap[16] =
 	{
 		0x0000,
@@ -233,6 +192,36 @@ void draw_game_start(UWORD *base)
 		0x0000
 	};
 
+	draw_bitmap(base, x, y, i_bitmap, 16, XOR);
+}
+
+void write_l(UWORD *base, int x, int y)
+{
+	static const UWORD l_bitmap[16] =
+	{
+		0x0000,
+		0x0000,
+		0x3C00,
+		0x3C00,
+		0x3C00,
+		0x3C00,
+		0x3C00,
+		0x3C00,
+		0x3C00,
+		0x3C00,
+		0x3C00,
+		0x3C00,
+		0x3FFC,
+		0x3FFC,
+		0x0000,
+		0x0000
+	};
+
+	draw_bitmap(base, x, y, l_bitmap, 16, XOR);
+}
+
+void write_n(UWORD *base, int x, int y)
+{
 	static const UWORD n_bitmap[16] =
 	{
 		0x0000,
@@ -253,26 +242,86 @@ void draw_game_start(UWORD *base)
 		0x0000
 	};
 
-	static const UWORD x_bitmap[16] =
+	draw_bitmap(base, x, y, n_bitmap, 16, XOR);
+}
+
+void write_o(UWORD *base, int x, int y)
+{
+	static const UWORD o_bitmap[16] =
 	{
 		0x0000,
 		0x0000,
-		0x303C,
-		0x303C,
-		0x0CF0,
-		0x0CF0,
-		0x03C0,
-		0x03C0,
-		0x0FC0,
-		0x0FC0,
-		0x3C30,
-		0x3C30,
-		0x300C,
-		0x300C,
+		0x0FF0,
+		0x0FF0,
+		0x3C3C,
+		0x3C3C,
+		0x3C3C,
+		0x3C3C,
+		0x3C3C,
+		0x3C3C,
+		0x3C3C,
+		0x3C3C,
+		0x0FF0,
+		0x0FF0,
 		0x0000,
 		0x0000
 	};
 
+	draw_bitmap(base, x, y, o_bitmap, 16, XOR);
+}
+
+void write_r(UWORD *base, int x, int y)
+{
+	static const UWORD r_bitmap[16] =
+	{
+		0x0000,
+		0x0000,
+		0x3FF0,
+		0x3FF0,
+		0x3C3C,
+		0x3C3C,
+		0x3C3C,
+		0x3C3C,
+		0x3FF0,
+		0x3FF0,
+		0x3CC0,
+		0x3CC0,
+		0x3C3C,
+		0x3C3C,
+		0x0000,
+		0x0000
+	};
+
+	draw_bitmap(base, x, y, r_bitmap, 16, XOR);
+}
+
+void write_s(UWORD *base, int x, int y)
+{
+	static const UWORD s_bitmap[16] =
+	{
+		0x0000,
+		0x0000,
+		0x0FF0,
+		0x0FF0,
+		0x3C00,
+		0x3C00,
+		0x0FF0,
+		0x0FF0,
+		0x00FF,
+		0x00FF,
+		0x30FC,
+		0x30FC,
+		0x0FF0,
+		0x0FF0,
+		0x0000,
+		0x0000
+	};
+
+	draw_bitmap(base, x, y, s_bitmap, 16, XOR);
+}
+
+void write_t(UWORD *base, int x, int y)
+{
 	static const UWORD t_bitmap[16] =
 	{
 		0x0000,
@@ -293,6 +342,36 @@ void draw_game_start(UWORD *base)
 		0x0000
 	};
 
+	draw_bitmap(base, x, y, t_bitmap, 16, XOR);
+}
+
+void write_x(UWORD *base, int x, int y)
+{
+	static const UWORD x_bitmap[16] =
+	{
+		0x0000,
+		0x0000,
+		0x303C,
+		0x303C,
+		0x0CF0,
+		0x0CF0,
+		0x03C0,
+		0x03C0,
+		0x0FC0,
+		0x0FC0,
+		0x3C30,
+		0x3C30,
+		0x300C,
+		0x300C,
+		0x0000,
+		0x0000
+	};
+
+	draw_bitmap(base, x, y, x_bitmap, 16, XOR);
+}
+
+void write_colon(UWORD *base, int x, int y)
+{
 	static const UWORD colon_bitmap[16] =
 	{
 		0x0000,
@@ -313,59 +392,70 @@ void draw_game_start(UWORD *base)
 		0x0000
 	};
 
+	draw_bitmap(base, x, y, colon_bitmap, 16, XOR);
+}
+
+void draw_game_start(UWORD *base)
+{
+	int i;
 	for(i = 0; i < 25; i++) {
-		draw_bitmap(base,12*16,i*16,border_block_bitmap,16,AND);
+		border_block(base,12*16,i*16);
 	}
 
 	for(i = 1; i < 13; i++) {
-		draw_bitmap(base,(i+12)*16,24*16,border_block_bitmap,16,AND);
+		border_block(base,(i+12)*16,24*16);
 	}
 
 	for(i = 24; i > -1; i--) {
-		draw_bitmap(base,(12+12)*16,i*16,border_block_bitmap,16,AND);
+		border_block(base,(12+12)*16,i*16);
 	}
 	
 	for(i = 12; i < 21; i++) {
-		draw_bitmap(base,(12+i)*16,0,border_block_bitmap,16,AND);
+		border_block(base,(12+i)*16,0);
 	}
 
 	for(i = 0; i < 12; i++) {
-		draw_bitmap(base,(12+20)*16,i*16,border_block_bitmap,16,AND);
+		border_block(base,(12+20)*16,i*16);
 	}
 
 	for(i = 20; i > 12; i--) {
-		draw_bitmap(base,(12+i)*16,11*16,border_block_bitmap,16,AND);
+		border_block(base,(12+i)*16,11*16);
 	}
 
-	draw_bitmap(base,25*16,1*16,s_bitmap,16,XOR);
-	draw_bitmap(base,26*16,1*16,c_bitmap,16,XOR);
-	draw_bitmap(base,27*16,1*16,zero_bitmap,16,XOR);
-	draw_bitmap(base,28*16,1*16,r_bitmap,16,XOR);
-	draw_bitmap(base,29*16,1*16,e_bitmap,16,XOR);
-	draw_bitmap(base,30*16,1*16,colon_bitmap,16,XOR);
+	write_s(base,25*16,1*16);
+	write_c(base,26*16,1*16);
+	write_o(base,27*16,1*16);
+	write_r(base,28*16,1*16);
+	write_e(base,29*16,1*16);
+	write_colon(base,30*16,1*16);
 
-	draw_bitmap(base,27*16,2*16,zero_bitmap,16,XOR);
-	draw_bitmap(base,28*16,2*16,zero_bitmap,16,XOR);
-	draw_bitmap(base,29*16,2*16,zero_bitmap,16,XOR);
-	draw_bitmap(base,30*16,2*16,zero_bitmap,16,XOR);
-	draw_bitmap(base,31*16,2*16,zero_bitmap,16,XOR);
+	num_zero(base,27*16,2*16);
+	num_zero(base,28*16,2*16);
+	num_zero(base,29*16,2*16);
+	num_zero(base,30*16,2*16);
+	num_zero(base,31*16,2*16);
 
-	draw_bitmap(base,25*16,3*16,l_bitmap,16,XOR);
-	draw_bitmap(base,26*16,3*16,i_bitmap,16,XOR);
-	draw_bitmap(base,27*16,3*16,n_bitmap,16,XOR);
-	draw_bitmap(base,28*16,3*16,e_bitmap,16,XOR);
-	draw_bitmap(base,29*16,3*16,s_bitmap,16,XOR);
-	draw_bitmap(base,30*16,3*16,colon_bitmap,16,XOR);
+	write_l(base,25*16,3*16);
+	write_i(base,26*16,3*16);
+	write_n(base,27*16,3*16);
+	write_e(base,28*16,3*16);
+	write_s(base,29*16,3*16);
+	write_colon(base,30*16,3*16);
 
-	draw_bitmap(base,29*16,4*16,zero_bitmap,16,XOR);
-	draw_bitmap(base,30*16,4*16,zero_bitmap,16,XOR);
-	draw_bitmap(base,31*16,4*16,zero_bitmap,16,XOR);
+	num_zero(base,29*16,4*16);
+	num_zero(base,30*16,4*16);
+	num_zero(base,31*16,4*16);
 
-	draw_bitmap(base,25*16,5*16,n_bitmap,16,XOR);
-	draw_bitmap(base,26*16,5*16,e_bitmap,16,XOR);
-	draw_bitmap(base,27*16,5*16,x_bitmap,16,XOR);
-	draw_bitmap(base,28*16,5*16,t_bitmap,16,XOR);
-	draw_bitmap(base,29*16,5*16,colon_bitmap,16,XOR);
+	write_n(base,25*16,5*16);
+	write_e(base,26*16,5*16);
+	write_x(base,27*16,5*16);
+	write_t(base,28*16,5*16);
+	write_colon(base,29*16,5*16);
+
+	draw_block(base,27*16,8*16);
+	draw_block(base,28*16,8*16);
+	draw_block(base,28*16,7*16);
+	draw_block(base,29*16,7*16);
 }
 
 void draw_bitmap(UWORD *base, int x, int y,
