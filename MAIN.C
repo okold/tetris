@@ -21,6 +21,7 @@ int main()
 {
 	int vsync_counter = 0;
 	int music_counter = 0;
+	int music_update = 10;
 
 	UBYTE active_block[4][4];
 
@@ -55,13 +56,17 @@ int main()
 		}
 		
 		vsync_counter++;
-		if (vsync_counter % 10 == 0)
+		if (vsync_counter % music_update == 0)
 		{
 			music_counter++;
 			if (music_counter == music_length())
 			{
 				vsync_counter = 0;
 				music_counter = 0;
+				if (music_update > 5)
+				{
+					music_update--;
+				}
 			}
 			play_music(music_counter);
 		}

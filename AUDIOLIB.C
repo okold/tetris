@@ -8,6 +8,7 @@
 #define E4 0x153
 #define B4 0x0E2
 #define A4 0x0FE
+#define A4F 0x10D
 #define E3 0x2A7
 #define A3 0x1FC
 #define A3F 0x21B
@@ -15,7 +16,7 @@
 #define CH_A_VOL 10
 #define CH_B_VOL 6
 
-#define NUM_BARS 8
+#define NUM_BARS 40
 #define CHORDS_PER_BAR 8
 
 typedef struct {
@@ -46,19 +47,60 @@ void play_music(int index)
 	static Chord D5_E4 = {D5,E4,CH_A_VOL,CH_B_VOL};
 	static Chord A4_A3 = {A4,A3,CH_A_VOL,CH_B_VOL};
 	static Chord A4_E4 = {A4,E4,CH_A_VOL,CH_B_VOL};
+	static Chord A4F_A3F = {A4F,A3F,CH_A_VOL,CH_B_VOL};
+	static Chord A4F_E4 = {A4F,E4,CH_A_VOL,CH_B_VOL};
 	static Chord  X_A3 = {A4,A3,0,CH_B_VOL};
 	static Chord  X_A3F = {A4,A3F,0,CH_B_VOL};
 	static Chord  X_E4 = {A4,E4,0,CH_B_VOL};
+	static Chord  X_E3 = {A4,E3,0,CH_B_VOL};
 
 	static Chord *music[(NUM_BARS * CHORDS_PER_BAR)] =
-					 {&E5_E3,  &E5_E4, &E5_E3,  &E5_E4, &B4_E3,  &B4_E4, &C5_E3,  &C5_E4,
+					 {&E5_E3,  &E5_E4, &E5_E3,  &E5_E4, &E5_E3,  &E5_E4, &E5_E3,  &E5_E4,
+					  &E5_E3,  &E5_E4, &E5_E3,  &E5_E4,  &X_E3,   &X_E4,  &X_E3,   &X_E4,
+
+					  &E5_E3,  &E5_E4, &E5_E3,  &E5_E4, &B4_E3,  &B4_E4, &C5_E3,  &C5_E4,
 					  &D5_E3,  &D5_E4, &D5_E3,  &D5_E4, &C5_E3,  &C5_E4, &B4_E3,  &B4_E4,
 					  &A4_A3,  &A4_E4, &A4_A3,   &X_E4, &A4_A3,  &A4_E4, &C5_A3,  &C5_E4,
 					  &E5_A3,  &E5_E4, &E5_A3,  &E5_E4, &D5_A3,  &D5_E4, &C5_A3,  &C5_E4,
 					  &B4_A3F, &B4_E4, &B4_A3F,  &X_E4, &B4_A3F, &B4_E4, &C5_A3F, &C5_E4,
 					  &D5_A3F, &D5_E4, &D5_A3F, &D5_E4, &E5_A3F, &E5_E4,  &X_A3F,  &X_E4,
 					  &C5_A3,  &C5_E4,  &X_A3,   &X_E4, &A4_A3,  &A4_E4, &A4_A3,   &X_E4,
-					  &A4_A3,  &A4_E4,  &X_A3,   &X_E4,  &X_A3,   &X_E4,  &X_A3,   &X_E4};
+					  &A4_A3,  &A4_E4,  &X_A3,   &X_E4,  &X_A3,   &X_E4,  &X_A3,   &X_E4,
+
+					  &E5_E3,  &E5_E4, &E5_E3,  &E5_E4, &B4_E3,  &B4_E4, &C5_E3,  &C5_E4,
+					  &D5_E3,  &D5_E4, &D5_E3,  &D5_E4, &C5_E3,  &C5_E4, &B4_E3,  &B4_E4,
+					  &A4_A3,  &A4_E4, &A4_A3,   &X_E4, &A4_A3,  &A4_E4, &C5_A3,  &C5_E4,
+					  &E5_A3,  &E5_E4, &E5_A3,  &E5_E4, &D5_A3,  &D5_E4, &C5_A3,  &C5_E4,
+					  &B4_A3F, &B4_E4, &B4_A3F,  &X_E4, &B4_A3F, &B4_E4, &C5_A3F, &C5_E4,
+					  &D5_A3F, &D5_E4, &D5_A3F, &D5_E4, &E5_A3F, &E5_E4,  &X_A3F,  &X_E4,
+					  &C5_A3,  &C5_E4,  &X_A3,   &X_E4, &A4_A3,  &A4_E4, &A4_A3,   &X_E4,
+					  &A4_A3,  &A4_E4,  &X_A3,   &X_E4,  &X_A3,   &X_E4,  &X_A3,   &X_E4,
+
+					  &E5_A3,  &E5_E4, &E5_A3,  &E5_E4, &C5_A3,  &C5_E4, &C5_A3,  &C5_E4,
+					  &D5_A3F, &D5_E4, &D5_A3F, &D5_E4, &B4_A3F, &B4_E4, &B4_A3F, &B4_E4,
+					  &C5_A3,  &C5_E4, &C5_A3,  &C5_E4, &A4_A3,  &A4_E4, &A4_A3,  &A4_E4,
+					  &A4F_A3F, &A4F_E4, &A4F_A3F, &A4F_E4, &B4_A3F, &B4_E4, &B4_A3F, &B4_E4,
+
+					  &E5_A3,  &E5_E4, &E5_A3,  &E5_E4, &C5_A3,  &C5_E4, &C5_A3,  &C5_E4,
+					  &D5_A3F, &D5_E4, &D5_A3F, &D5_E4, &B4_A3F, &B4_E4, &B4_A3F, &B4_E4,
+					  &C5_A3,  &C5_E4, &C5_A3,  &C5_E4, &A4_A3,  &A4_E4, &A4_A3,  &A4_E4,
+					  &A4F_A3F, &A4F_E4, &A4F_A3F, &A4F_E4, &B4_A3F, &B4_E4, &B4_A3F, &B4_E4,
+
+					  &E5_E3,  &E5_E4, &E5_E3,  &E5_E4, &B4_E3,  &B4_E4, &C5_E3,  &C5_E4,
+					  &D5_E3,  &D5_E4, &D5_E3,  &D5_E4, &C5_E3,  &C5_E4, &B4_E3,  &B4_E4,
+					  &A4_A3,  &A4_E4, &A4_A3,   &X_E4, &A4_A3,  &A4_E4, &C5_A3,  &C5_E4,
+					  &E5_A3,  &E5_E4, &E5_A3,  &E5_E4, &D5_A3,  &D5_E4, &C5_A3,  &C5_E4,
+					  &B4_A3F, &B4_E4, &B4_A3F,  &X_E4, &B4_A3F, &B4_E4, &C5_A3F, &C5_E4,
+					  &D5_A3F, &D5_E4, &D5_A3F, &D5_E4, &E5_A3F, &E5_E4,  &X_A3F,  &X_E4,
+					  &C5_A3,  &C5_E4,  &X_A3,   &X_E4, &A4_A3,  &A4_E4, &A4_A3,   &X_E4,
+					  
+					  &E5_E3,  &E5_E4, &E5_E3,  &E5_E4, &B4_E3,  &B4_E4, &C5_E3,  &C5_E4,
+					  &D5_E3,  &D5_E4, &D5_E3,  &D5_E4, &C5_E3,  &C5_E4, &B4_E3,  &B4_E4,
+					  &A4_A3,  &A4_E4, &A4_A3,   &X_E4, &A4_A3,  &A4_E4, &C5_A3,  &C5_E4,
+					  &E5_A3,  &E5_E4, &E5_A3,  &E5_E4, &D5_A3,  &D5_E4, &C5_A3,  &C5_E4,
+					  &B4_A3F, &B4_E4, &B4_A3F,  &X_E4, &B4_A3F, &B4_E4, &C5_A3F, &C5_E4,
+					  &D5_A3F, &D5_E4, &D5_A3F, &D5_E4, &E5_A3F, &E5_E4,  &X_A3F,  &X_E4,
+					  &C5_A3,  &C5_E4,  &X_A3,   &X_E4, &A4_A3,  &A4_E4, &A4_A3,   &X_E4};
 
 	long old_ssp = Super(0);
 
@@ -108,6 +150,20 @@ void play_chord(Chord *chord, volatile char *PSG_reg_select, volatile char *PSG_
 {
 	*PSG_reg_select = 0;		/* set channel A */
 	*PSG_reg_write  = chord->note_a;
+
+	*PSG_reg_select = 1;		/* set channel A rough */
+	if (chord->note_a >= 0x200)
+	{
+		*PSG_reg_write  = 2;
+	}
+	else if (chord->note_a >= 0x100)
+	{
+		*PSG_reg_write  = 1;
+	}
+	else
+	{
+		*PSG_reg_write  = 0;
+	}
 
 	*PSG_reg_select = 8;		/* set channel A volume */
 	*PSG_reg_write  = chord->note_a_vol;
