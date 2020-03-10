@@ -16,7 +16,7 @@
 #define CH_A_VOL 10
 #define CH_B_VOL 6
 
-#define NUM_BARS 40
+#define NUM_BARS 41
 #define CHORDS_PER_BAR 8
 
 typedef struct {
@@ -93,6 +93,7 @@ void play_music(int index)
 					  &B4_A3F, &B4_E4, &B4_A3F,  &X_E4, &B4_A3F, &B4_E4, &C5_A3F, &C5_E4,
 					  &D5_A3F, &D5_E4, &D5_A3F, &D5_E4, &E5_A3F, &E5_E4,  &X_A3F,  &X_E4,
 					  &C5_A3,  &C5_E4,  &X_A3,   &X_E4, &A4_A3,  &A4_E4, &A4_A3,   &X_E4,
+					  &A4_A3,  &A4_E4,  &X_A3,   &X_E4,  &X_A3,   &X_E4,  &X_A3,   &X_E4,
 					  
 					  &E5_E3,  &E5_E4, &E5_E3,  &E5_E4, &B4_E3,  &B4_E4, &C5_E3,  &C5_E4,
 					  &D5_E3,  &D5_E4, &D5_E3,  &D5_E4, &C5_E3,  &C5_E4, &B4_E3,  &B4_E4,
@@ -148,8 +149,8 @@ void silence_music()
 
 void play_chord(Chord *chord, volatile char *PSG_reg_select, volatile char *PSG_reg_write)
 {
-	*PSG_reg_select = 0;		/* set channel A */
-	*PSG_reg_write  = chord->note_a;
+	*PSG_reg_select = 8;		/* set channel A volume */
+	*PSG_reg_write  = chord->note_a_vol;
 
 	*PSG_reg_select = 1;		/* set channel A rough */
 	if (chord->note_a >= 0x200)
@@ -165,11 +166,11 @@ void play_chord(Chord *chord, volatile char *PSG_reg_select, volatile char *PSG_
 		*PSG_reg_write  = 0;
 	}
 
-	*PSG_reg_select = 8;		/* set channel A volume */
-	*PSG_reg_write  = chord->note_a_vol;
+	*PSG_reg_select = 0;		/* set channel A */
+	*PSG_reg_write  = chord->note_a;
 
-	*PSG_reg_select = 2;		/* set channel B */
-	*PSG_reg_write  = chord->note_b;
+	*PSG_reg_select = 9;		/* set channel B volume */
+	*PSG_reg_write  = chord->note_b_vol;
 
 	*PSG_reg_select = 3;		/* set channel B rough */
 	if (chord->note_b >= 0x200)
@@ -185,6 +186,6 @@ void play_chord(Chord *chord, volatile char *PSG_reg_select, volatile char *PSG_
 		*PSG_reg_write  = 0;
 	}
 
-	*PSG_reg_select = 9;		/* set channel B volume */
-	*PSG_reg_write  = chord->note_b_vol;
+	*PSG_reg_select = 2;		/* set channel B */
+	*PSG_reg_write  = chord->note_b;
 }

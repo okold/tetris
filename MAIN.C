@@ -63,7 +63,7 @@ int main()
 			{
 				vsync_counter = 0;
 				music_counter = 0;
-				if (music_update > 5)
+				if (music_update > 4) /* imo this is the minimum interval for the music to sound good */
 				{
 					music_update--;
 				}
