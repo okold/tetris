@@ -17,6 +17,8 @@
 
 int main()
 {
+	UBYTE active_block[4][4];
+
 	int y = 0;
 
 	UBYTE *base8 = Physbase();
@@ -31,12 +33,13 @@ int main()
 	
 	draw_game_start(base16);
 
-	while (!Cconis())     /* repeat until key press... */
+	gen_z_block(active_block);
+
+	while (!Cconis())    
 	{
 		Vsync();
-		draw_blank_block(base16,0,y);
-		y++;				      /* move down */
-		draw_block(base16,0,y);
+		y++;				     
+		draw_matrix(0,y,active_block,base16);
 		
 		if (y == 400)
 			y = 0;

@@ -21,7 +21,7 @@ void plot_line(unsigned short x1, unsigned short y1,
 	linea3();
 }
 
-void draw_block(UWORD *base, int x, int y)
+void draw_block(UWORD *base, int x, int y, short mode)
 {
 	static const UWORD block_bitmap[16] =
 	{
@@ -42,7 +42,7 @@ void draw_block(UWORD *base, int x, int y)
 		0x7FFD,
 		0xFFFE
 	};
-	draw_bitmap(base, x, y, block_bitmap, 16, AND);	
+	draw_bitmap(base, x, y, block_bitmap, 16, mode);	
 }
 
 void draw_blank_block(UWORD *base, int x, int y)
@@ -152,10 +152,10 @@ void draw_game_start(UWORD *base)
 	write_t(base,28*16,5*16);
 	write_colon(base,29*16,5*16);
 
-	draw_block(base,27*16,8*16);
-	draw_block(base,28*16,8*16);
-	draw_block(base,28*16,7*16);
-	draw_block(base,29*16,7*16);
+	draw_block(base,27*16,8*16, AND);
+	draw_block(base,28*16,8*16, AND);
+	draw_block(base,28*16,7*16, AND);
+	draw_block(base,29*16,7*16, AND);
 }
 
 void draw_bitmap(UWORD *base, int x, int y,
