@@ -3,6 +3,8 @@
         "*.pl": "prolog",
         "DRAWLIB.C": "cpp",
         "FONTLIB.C": "cpp",
-        "MAIN.C": "cpp"
+        "MAIN.C": "cpp",
+        "MUSIC.C": "cpp",
+        "BLOCKLIB.C": "cpp"
     }
 }
