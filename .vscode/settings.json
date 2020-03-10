@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "*.pl": "prolog",
+        "DRAWLIB.C": "cpp",
+        "FONTLIB.C": "cpp",
+        "MAIN.C": "cpp"
+    }
+}

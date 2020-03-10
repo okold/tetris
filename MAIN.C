@@ -3,6 +3,7 @@
 #include <osbind.h>
 #include "drawlib.h"
 #include "typedef.h"
+#include "fontlib.h"
 
 #define PLAY_AREA_ROWS 24
 #define PLAY_AREA_COLS 10
