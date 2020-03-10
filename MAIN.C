@@ -5,6 +5,7 @@
 #include "typedef.h"
 #include "fontlib.h"
 #include "blocklib.h"
+#include "audiolib.h"
 
 #define PLAY_AREA_ROWS 24
 #define PLAY_AREA_COLS 10
@@ -18,6 +19,9 @@
 
 int main()
 {
+	int vsync_counter = 0;
+	int music_counter = 0;
+
 	UBYTE active_block[4][4];
 
 	int y = 0;
@@ -36,6 +40,9 @@ int main()
 
 	gen_z_block(active_block);
 
+	enable_channels();
+	play_music(music_counter); /* plays first note */
+
 	while (!Cconis())    
 	{
 		Vsync();
@@ -43,8 +50,24 @@ int main()
 		draw_matrix(0,y,active_block,base16);
 		
 		if (y == 400)
+		{
 			y = 0;
+		}
+		
+		vsync_counter++;
+		if (vsync_counter % 10 == 0)
+		{
+			music_counter++;
+			if (music_counter == music_length())
+			{
+				vsync_counter = 0;
+				music_counter = 0;
+			}
+			play_music(music_counter);
+		}
 	}
+
+	silence_music();
 
 	Cnecin();                  /* wait for key press */
 

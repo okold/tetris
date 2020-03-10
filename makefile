@@ -2,12 +2,12 @@ PROGNAME = tetris
 
 CC = cc68x
 
-OBJ = main.o drawlib.o fontlib.o blocklib.o
+OBJ = main.o drawlib.o fontlib.o blocklib.o audiolib.o
 
 $(PROGNAME): $(OBJ)
 	$(CC) -g $(OBJ) -o $(PROGNAME)
 
-main.o: main.c drawlib.h fontlib.h blocklib.h
+main.o: main.c drawlib.h fontlib.h blocklib.h audiolib.h
 	$(CC) -g -c main.c
 
 drawlib.o: drawlib.c drawlib.h fontlib.h
@@ -18,6 +18,9 @@ fontlib.o: fontlib.c fontlib.h
 
 blocklib.o: blocklib.c blocklib.h drawlib.h
 	$(CC) -g -c blocklib.c
+
+audiolib.o: audiolib.c audiolib.h
+	$(CC) -g -c audiolib.c	
 
 clean:
 	!rm $(OBJ) $(PROGNAME)

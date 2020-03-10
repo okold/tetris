@@ -17,7 +17,7 @@ void draw_matrix(int x, int y, UBYTE matrix[][4], UWORD *base)
             }
             else
             {
-                /*draw_blank_block(base, x + (i*16), y + (j*16));*/
+                draw_blank_block(base, x + (i*16), y + (j*16));
                 draw_block(base, x + (i*16), y + (j*16), AND);
             }
         }
