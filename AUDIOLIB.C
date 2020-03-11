@@ -63,18 +63,18 @@ void play_music(int index)
 					  &A4_A3,  &A4_E4, &A4_A3,   &X_E4, &A4_A3,  &A4_E4, &C5_A3,  &C5_E4,
 					  &E5_A3,  &E5_E4, &E5_A3,  &E5_E4, &D5_A3,  &D5_E4, &C5_A3,  &C5_E4,
 					  &B4_A3F, &B4_E4, &B4_A3F,  &X_E4, &B4_A3F, &B4_E4, &C5_A3F, &C5_E4,
-					  &D5_A3F, &D5_E4, &D5_A3F, &D5_E4, &E5_A3F, &E5_E4,  &X_A3F,  &X_E4,
-					  &C5_A3,  &C5_E4,  &X_A3,   &X_E4, &A4_A3,  &A4_E4, &A4_A3,   &X_E4,
-					  &A4_A3,  &A4_E4,  &X_A3,   &X_E4,  &X_A3,   &X_E4,  &X_A3,   &X_E4,
+					  &D5_A3F, &D5_E4, &D5_A3F, &D5_E4, &E5_A3F, &E5_E4, &E5_A3F,  &X_E4,
+					  &C5_A3,  &C5_E4, &C5_A3,   &X_E4, &A4_A3,  &A4_E4, &A4_A3,   &X_E4,
+					  &A4_A3,  &A4_E4, &A4_A3,  &A4_E4,  &X_A3,   &X_E4,  &X_A3,   &X_E4,
 
 					  &E5_E3,  &E5_E4, &E5_E3,  &E5_E4, &B4_E3,  &B4_E4, &C5_E3,  &C5_E4,
 					  &D5_E3,  &D5_E4, &D5_E3,  &D5_E4, &C5_E3,  &C5_E4, &B4_E3,  &B4_E4,
 					  &A4_A3,  &A4_E4, &A4_A3,   &X_E4, &A4_A3,  &A4_E4, &C5_A3,  &C5_E4,
 					  &E5_A3,  &E5_E4, &E5_A3,  &E5_E4, &D5_A3,  &D5_E4, &C5_A3,  &C5_E4,
 					  &B4_A3F, &B4_E4, &B4_A3F,  &X_E4, &B4_A3F, &B4_E4, &C5_A3F, &C5_E4,
-					  &D5_A3F, &D5_E4, &D5_A3F, &D5_E4, &E5_A3F, &E5_E4,  &X_A3F,  &X_E4,
-					  &C5_A3,  &C5_E4,  &X_A3,   &X_E4, &A4_A3,  &A4_E4, &A4_A3,   &X_E4,
-					  &A4_A3,  &A4_E4,  &X_A3,   &X_E4,  &X_A3,   &X_E4,  &X_A3,   &X_E4,
+					  &D5_A3F, &D5_E4, &D5_A3F, &D5_E4, &E5_A3F, &E5_E4, &E5_A3F,  &X_E4,
+					  &C5_A3,  &C5_E4, &C5_A3,   &X_E4, &A4_A3,  &A4_E4, &A4_A3,   &X_E4,
+					  &A4_A3,  &A4_E4, &A4_A3,  &A4_E4,  &X_A3,   &X_E4,  &X_A3,   &X_E4,
 
 					  &E5_A3,  &E5_E4, &E5_A3,  &E5_E4, &C5_A3,  &C5_E4, &C5_A3,  &C5_E4,
 					  &D5_A3F, &D5_E4, &D5_A3F, &D5_E4, &B4_A3F, &B4_E4, &B4_A3F, &B4_E4,
@@ -84,24 +84,24 @@ void play_music(int index)
 					  &E5_A3,  &E5_E4, &E5_A3,  &E5_E4, &C5_A3,  &C5_E4, &C5_A3,  &C5_E4,
 					  &D5_A3F, &D5_E4, &D5_A3F, &D5_E4, &B4_A3F, &B4_E4, &B4_A3F, &B4_E4,
 					  &C5_A3,  &C5_E4, &C5_A3,  &C5_E4, &A4_A3,  &A4_E4, &A4_A3,  &A4_E4,
-					  &A4F_A3F, &A4F_E4, &A4F_A3F, &A4F_E4, &B4_A3F, &B4_E4, &B4_A3F, &B4_E4,
+					  &A4F_A3F, &A4F_E4, &A4F_A3F, &A4F_E4, &A4F_A3F, &A4F_E4, &A4F_A3F, &X_E4,
 
 					  &E5_E3,  &E5_E4, &E5_E3,  &E5_E4, &B4_E3,  &B4_E4, &C5_E3,  &C5_E4,
 					  &D5_E3,  &D5_E4, &D5_E3,  &D5_E4, &C5_E3,  &C5_E4, &B4_E3,  &B4_E4,
 					  &A4_A3,  &A4_E4, &A4_A3,   &X_E4, &A4_A3,  &A4_E4, &C5_A3,  &C5_E4,
 					  &E5_A3,  &E5_E4, &E5_A3,  &E5_E4, &D5_A3,  &D5_E4, &C5_A3,  &C5_E4,
 					  &B4_A3F, &B4_E4, &B4_A3F,  &X_E4, &B4_A3F, &B4_E4, &C5_A3F, &C5_E4,
-					  &D5_A3F, &D5_E4, &D5_A3F, &D5_E4, &E5_A3F, &E5_E4,  &X_A3F,  &X_E4,
-					  &C5_A3,  &C5_E4,  &X_A3,   &X_E4, &A4_A3,  &A4_E4, &A4_A3,   &X_E4,
-					  &A4_A3,  &A4_E4,  &X_A3,   &X_E4,  &X_A3,   &X_E4,  &X_A3,   &X_E4,
+					  &D5_A3F, &D5_E4, &D5_A3F, &D5_E4, &E5_A3F, &E5_E4, &E5_A3F,  &X_E4,
+					  &C5_A3,  &C5_E4, &C5_A3,   &X_E4, &A4_A3,  &A4_E4, &A4_A3,   &X_E4,
+					  &A4_A3,  &A4_E4, &A4_A3,  &A4_E4,  &X_A3,   &X_E4,  &X_A3,   &X_E4,
 					  
 					  &E5_E3,  &E5_E4, &E5_E3,  &E5_E4, &B4_E3,  &B4_E4, &C5_E3,  &C5_E4,
 					  &D5_E3,  &D5_E4, &D5_E3,  &D5_E4, &C5_E3,  &C5_E4, &B4_E3,  &B4_E4,
 					  &A4_A3,  &A4_E4, &A4_A3,   &X_E4, &A4_A3,  &A4_E4, &C5_A3,  &C5_E4,
 					  &E5_A3,  &E5_E4, &E5_A3,  &E5_E4, &D5_A3,  &D5_E4, &C5_A3,  &C5_E4,
 					  &B4_A3F, &B4_E4, &B4_A3F,  &X_E4, &B4_A3F, &B4_E4, &C5_A3F, &C5_E4,
-					  &D5_A3F, &D5_E4, &D5_A3F, &D5_E4, &E5_A3F, &E5_E4,  &X_A3F,  &X_E4,
-					  &C5_A3,  &C5_E4,  &X_A3,   &X_E4, &A4_A3,  &A4_E4, &A4_A3,   &X_E4};
+					  &D5_A3F, &D5_E4, &D5_A3F, &D5_E4, &E5_A3F, &E5_E4, &E5_A3F,  &X_E4,
+					  &C5_A3,  &C5_E4, &C5_A3,   &X_E4, &A4_A3,  &A4_E4, &A4_A3,   &X_E4};
 
 	long old_ssp = Super(0);
 
