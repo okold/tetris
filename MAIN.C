@@ -22,6 +22,7 @@ int main()
 	int vsync_counter = 0;
 	int music_counter = 0;
 	int music_update = 10;
+	int block_speed = 1;
 
 	UBYTE active_block[4][4];
 
@@ -46,11 +47,13 @@ int main()
 
 	while (!Cconis())    
 	{
-		Vsync();
-		y++;				     
+		draw_blank_matrix(0,y,active_block,base16);
+		y += block_speed;			
 		draw_matrix(0,y,active_block,base16);
+
+		Vsync(); 
 		
-		if (y == 400)
+		if (y >= 400)
 		{
 			y = 0;
 		}
@@ -66,6 +69,7 @@ int main()
 				if (music_update > 4) /* imo this is the minimum interval for the music to sound good */
 				{
 					music_update--;
+					block_speed++;
 				}
 			}
 			play_music(music_counter);

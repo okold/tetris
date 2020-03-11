@@ -1,28 +1,6 @@
 #include "blocklib.h"
-#include "drawlib.h"
 
 void copy_matrix(UBYTE src[][4], UBYTE dst[][4]);
-
-void draw_matrix(int x, int y, UBYTE matrix[][4], UWORD *base)
-{
-    int i, j;
-
-    for (i = 0; i < 4; i++)
-    {
-        for (j = 0; j < 4; j++)
-        {
-            if (matrix[i][j] == 0)
-            {
-                draw_blank_block(base, x + (i*16), y + (j*16));
-            }
-            else
-            {
-                draw_blank_block(base, x + (i*16), y + (j*16));
-                draw_block(base, x + (i*16), y + (j*16), AND);
-            }
-        }
-    } 
-}
 
 void gen_i_block(UBYTE matrix[][4])
 {
