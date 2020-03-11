@@ -62,11 +62,11 @@ int main()
 		if (vsync_counter % music_update == 0)
 		{
 			music_counter++;
-			if (music_counter == music_length())
+			if (music_counter == NUM_CHORDS)
 			{
 				vsync_counter = 0;
 				music_counter = 0;
-				if (music_update > 4) /* imo this is the minimum interval for the music to sound good */
+				if (music_update > 5) /* imo this is the minimum interval for the music to sound good */
 				{
 					music_update--;
 					block_speed++;
@@ -76,7 +76,7 @@ int main()
 		}
 	}
 
-	silence_music();
+	silence();
 
 	Cnecin();                  /* wait for key press */
 
