@@ -4,6 +4,7 @@ A.OUT
 *.O
 MAKEFILE~
 makefile~
+.vscode/
 
 # Prerequisites
 *.d
