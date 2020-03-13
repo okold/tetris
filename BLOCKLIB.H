@@ -1,3 +1,18 @@
+/* BLOCKLIB.H
+*
+*   Olga Koldachenko	okold525@mtroyal.ca
+*   COMP 2659           Assignment 2
+*   Winter 2020         Tyson Kendon
+*
+*   Purpose:    Handles all Tetronimo procedures.
+*
+*   Public Functions:   gen_X_block(UBYTE matrix[][4]);
+*                       -   Where X = i, j, l, o, s, t, or z.
+*                       -   Generates a tetronimo of the given letter.
+*
+*   TODO: Merge gen_x_block to a gen_block with a char argument
+*/
+
 #ifndef BLOCKLIB_H
 #define BLOCKLIB_H
 

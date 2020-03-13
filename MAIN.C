@@ -1,3 +1,12 @@
+/* MAIN.C
+*
+*	TETRIS for the Atari ST
+*
+*   Olga Koldachenko	okold525@mtroyal.ca
+*	Colton Paquette		cpaqu904@mtroyal.ca
+*   COMP 2659           Assignment 2
+*   Winter 2020         Tyson Kendon
+*/
 #include <stdio.h>
 #include <linea.h>
 #include <osbind.h>
@@ -89,7 +98,9 @@ int main()
 			{
 				vsync_counter = 0;
 				music_counter = 0;
-				if (music_update > 5) /* imo this is the minimum interval for the music to sound good */
+				/*	imo this is the minimum interval for 
+					the music to sound good */
+				if (music_update > 5)
 				{
 					music_update--;
 					block_speed++;
