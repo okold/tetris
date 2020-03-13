@@ -26,7 +26,10 @@ int main()
 	int block_speed = 1;
 
 	UBYTE active_block[4][4];
+	UBYTE play_area[25][10];
 
+	/*	x and y of active play block, old x is for clearing old block */
+	/*	key is the value of the key pressed */
 	int x = 0;
 	int old_x = 0;
 	int y = 0;
