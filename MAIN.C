@@ -6,6 +6,7 @@
 #include "fontlib.h"
 #include "blocklib.h"
 #include "audiolib.h"
+#include "input.h"
 
 #define PLAY_AREA_ROWS 24
 #define PLAY_AREA_COLS 10
@@ -26,7 +27,10 @@ int main()
 
 	UBYTE active_block[4][4];
 
+	int x = 0;
+	int old_x = 0;
 	int y = 0;
+	int key;
 
 	UBYTE *base8 = Physbase();
 	UWORD *base16 = Physbase();
@@ -45,11 +49,27 @@ int main()
 	enable_channels();
 	play_music(music_counter); /* plays first note */
 
-	while (!Cconis())    
+	while (1)    
 	{
-		draw_blank_matrix(0,y,active_block,base16);
+		old_x = x;
+		if(is_pressed())
+		{	
+			key = read_key();
+			if(key == 97){
+
+				x -= 16;
+			} else if(key == 100){
+
+				x += 16;
+			} else if(key == 113){
+
+				goto end;
+			}
+		}
+
+		draw_blank_matrix(old_x,y,active_block,base16);
 		y += block_speed;			
-		draw_matrix(0,y,active_block,base16);
+		draw_matrix(x,y,active_block,base16);
 
 		Vsync(); 
 		
@@ -75,11 +95,8 @@ int main()
 			play_music(music_counter);
 		}
 	}
-
+	end:
 	silence();
-
-	Cnecin();                  /* wait for key press */
-
 	fill_screen(base32, 0);      /* set screen to all white */
 
 	return 0;

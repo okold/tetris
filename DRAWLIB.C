@@ -134,60 +134,60 @@ void draw_game_start(UWORD *base)
 		border_block(base,12*16,i*16);
 	}
 
-	for(i = 1; i < 13; i++) {
+	for(i = 1; i < 11; i++) {
 		border_block(base,(i+12)*16,24*16);
 	}
 
 	for(i = 24; i > -1; i--) {
-		border_block(base,(12+12)*16,i*16);
+		border_block(base,(11+12)*16,i*16);
 	}
 	
 	for(i = 12; i < 21; i++) {
-		border_block(base,(12+i)*16,0);
+		border_block(base,(11+i)*16,0);
 	}
 
 	for(i = 0; i < 12; i++) {
-		border_block(base,(12+20)*16,i*16);
+		border_block(base,(11+20)*16,i*16);
 	}
 
 	for(i = 20; i > 12; i--) {
-		border_block(base,(12+i)*16,11*16);
+		border_block(base,(11+i)*16,11*16);
 	}
 
-	write_s(base,25*16,1*16);
-	write_c(base,26*16,1*16);
-	write_o(base,27*16,1*16);
-	write_r(base,28*16,1*16);
-	write_e(base,29*16,1*16);
-	write_colon(base,30*16,1*16);
+	write_s(base,24*16,1*16);
+	write_c(base,25*16,1*16);
+	write_o(base,26*16,1*16);
+	write_r(base,27*16,1*16);
+	write_e(base,28*16,1*16);
+	write_colon(base,29*16,1*16);
 
+	num_0(base,26*16,2*16);
 	num_0(base,27*16,2*16);
 	num_0(base,28*16,2*16);
 	num_0(base,29*16,2*16);
 	num_0(base,30*16,2*16);
-	num_0(base,31*16,2*16);
 
-	write_l(base,25*16,3*16);
-	write_i(base,26*16,3*16);
-	write_n(base,27*16,3*16);
-	write_e(base,28*16,3*16);
-	write_s(base,29*16,3*16);
-	write_colon(base,30*16,3*16);
+	write_l(base,24*16,3*16);
+	write_i(base,25*16,3*16);
+	write_n(base,26*16,3*16);
+	write_e(base,27*16,3*16);
+	write_s(base,28*16,3*16);
+	write_colon(base,29*16,3*16);
 
+	num_0(base,28*16,4*16);
 	num_0(base,29*16,4*16);
 	num_0(base,30*16,4*16);
-	num_0(base,31*16,4*16);
 
-	write_n(base,25*16,5*16);
-	write_e(base,26*16,5*16);
-	write_x(base,27*16,5*16);
-	write_t(base,28*16,5*16);
-	write_colon(base,29*16,5*16);
+	write_n(base,24*16,5*16);
+	write_e(base,25*16,5*16);
+	write_x(base,26*16,5*16);
+	write_t(base,27*16,5*16);
+	write_colon(base,28*16,5*16);
 
+	draw_block(base,26*16,8*16, AND);
 	draw_block(base,27*16,8*16, AND);
-	draw_block(base,28*16,8*16, AND);
+	draw_block(base,27*16,7*16, AND);
 	draw_block(base,28*16,7*16, AND);
-	draw_block(base,29*16,7*16, AND);
 }
 
 void draw_bitmap(UWORD *base, int x, int y,
