@@ -1,3 +1,9 @@
+/* FONTLIB.H
+*
+*	Colton Paquette		cpaqu904@mtroyal.ca
+*   COMP 2659           Assignment 2
+*   Winter 2020         Tyson Kendon
+*/
 #ifndef FONTLIB_H
 #define FONTLIB_H
 

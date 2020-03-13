@@ -1,9 +1,34 @@
+/* DRAWLIB.C
+*
+*   Olga Koldachenko	okold525@mtroyal.ca
+*	Colton Paquette		cpaqu904@mtroyal.ca
+*   COMP 2659           Assignment 2
+*   Winter 2020         Tyson Kendon
+*
+*	Private Functions:	void draw_blank_block(UWORD *base, int x, int y);
+*                       -   Draws a block with a fully black bitmap.
+*
+*                       void draw_block(UWORD *base, int x, int y, short mode);
+*                       -   Draws a block in Style 1.
+*
+*						void border_block(UWORD *base, int x, int y);
+*						-	Draws a block in Style 2.
+*
+*						void draw_score_box(int x, int y, 
+*											int width, int height);
+*						-	Draws the score box, called in draw_game_start.
+*/
 #include <linea.h>
 #include <osbind.h>
 #include <stdio.h>
 #include "drawlib.h"
 #include "typedef.h"
 #include "fontlib.h"
+
+void draw_blank_block(UWORD *base, int x, int y);
+void draw_block(UWORD *base, int x, int y, short mode);
+void border_block(UWORD *base, int x, int y);
+void draw_score_box(int x, int y, int width, int height);
 
 void plot_line(unsigned short x1, unsigned short y1,
                unsigned short x2, unsigned short y2,
