@@ -17,6 +17,7 @@
 #include "audiolib.h"
 #include "input.h"
 
+#define TILES 16
 #define PLAY_AREA_ROWS 24
 #define PLAY_AREA_COLS 10
 #define PLAY_AREA_OFFSET_X 60
@@ -27,26 +28,45 @@
 #define SCORE_BOX_OFFSET_X 250
 #define SCORE_BOX_OFFSET_Y 10
 
+void printState(UBYTE arr[12][26]);
+
+
 int main()
 {
 	int vsync_counter = 0;
 	int music_counter = 0;
 	int music_update = 10;
 	int block_speed = 1;
-
-	UBYTE active_block[4][4];
-	UBYTE play_area[25][10];
-
-	/*	x and y of active play block, old x is for clearing old block */
-	/*	key is the value of the key pressed */
+	
 	int x = 0;
 	int old_x = 0;
 	int y = 0;
+	int old_y = 0;
 	int key;
+	int i,j;
+
+	UBYTE active_block[4][4];
+	UBYTE gameState[12][26];
 
 	UBYTE *base8 = Physbase();
 	UWORD *base16 = Physbase();
 	ULONG *base32 = Physbase();
+
+	/* 
+		Attempting to combine outOfBounds() and collides().
+		Creates a border around the actual playing area to simulate unavailable tiles.
+	*/
+	for(i = 0; i < 12; i++) {
+		for(j = 0; j < 26; j++) {
+			if(i == 0 || i == 11 ||
+			   j == 0 || j == 25)
+			{
+				gameState[i][j] = 1;
+			} else {
+				gameState[i][j] = 0;
+			}
+		}
+	}
 
 	disable_cursor();          /* hide blinking text cursor */
 
@@ -62,30 +82,41 @@ int main()
 	play_music(music_counter); /* plays first note */
 
 	while (1)    
-	{
+	{	
 		old_x = x;
+		old_y = y;
+
 		if(is_pressed())
 		{	
 			key = read_key();
-			if(key == 97){
 
-				x -= 16;
-			} else if(key == 100){
+			if(key == 97)
+			{
+				x -= 1;
+				for(i = 0; i < x + 4; i++) {
+					for(j = 0; j < y + 4; j++){
+					}
+				}
 
-				x += 16;
-			} else if(key == 113){
+			} else if(key == 100) {
+
+				x += 1;
+			} else if(key == 115) {
+
+				y += 1;
+			} else if(key == 113) {
 
 				goto end;
 			}
 		}
 
-		draw_blank_matrix(old_x,y,active_block,base16);
+		draw_blank_matrix(old_x * TILES,old_y * TILES,active_block,base16);
 		y += block_speed;			
-		draw_matrix(x,y,active_block,base16);
+		draw_matrix(x * TILES,y * TILES,active_block,base16);
 
 		Vsync(); 
 		
-		if (y >= 400)
+		if (y * TILES >= 400)
 		{
 			y = 0;
 		}
@@ -109,9 +140,21 @@ int main()
 			play_music(music_counter);
 		}
 	}
+
 	end:
 	silence();
 	fill_screen(base32, 0);      /* set screen to all white */
-
+	printState(gameState);
 	return 0;
 }
+
+void printState(UBYTE arr[12][26]) 
+{ 
+    int i, j; 
+    for (i = 0; i < 12; i++) {
+      	for (j = 0; j < 26; j++) { 
+        	printf("%d ", arr[i][j]);
+		} 
+		printf("\n");
+	}
+} 

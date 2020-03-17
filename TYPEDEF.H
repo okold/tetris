@@ -11,6 +11,9 @@
 #define OR    1
 #define XOR   2
 
+#define FALSE 0
+#define TRUE 1
+
 typedef unsigned char UBYTE;
 typedef unsigned int  UWORD;
 typedef unsigned long ULONG;
