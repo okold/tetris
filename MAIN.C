@@ -29,10 +29,11 @@
 #define SCORE_BOX_OFFSET_Y 10
 
 void printState(UBYTE arr[12][26]);
-
+void vsync_wait(int x);
 
 int main()
 {
+	int slow_mo = FALSE;
 	int vsync_counter = 0;
 	int music_counter = 0;
 	int music_update = 10;
@@ -88,7 +89,7 @@ int main()
 		{	
 			key = read_key();
 
-			if(key == 97)
+			if(key == 'a')
 			{
 				x -= 1;
 				for(i = 0; i < x + 4; i++) {
@@ -97,16 +98,26 @@ int main()
 					}
 				}
 
-			} else if(key == 100) {
+			} else if(key == 'd') {
 
 				x += 1;
-			} else if(key == 115) {
+			} else if(key == 's') {
 
 				y += 1;
-			} else if(key == 113) {
+			} else if(key == 'q') {
 
 				goto end;
 			}
+			  else if(key == 'e') {
+				  if (slow_mo)
+				  {
+					  slow_mo = FALSE;
+				  }
+				  else
+				  {
+					  slow_mo = TRUE;
+				  }
+			  }
 		}
 
 		draw_blank_matrix(old_x * TILES,old_y * TILES,active_block,base16);
@@ -133,11 +144,16 @@ int main()
 				if (music_update > 5)
 				{
 					music_update--;
-					block_speed++;
 				}
 			}
 			play_music(music_counter);
 		}
+
+		if (slow_mo)
+		{
+			vsync_wait(10); /* for debug, slows the game down*/
+		}
+		
 	}
 
 	end:
@@ -159,6 +175,7 @@ void printState(UBYTE arr[12][26])
 	}
 } 
 
+<<<<<<< HEAD
 /*	Checks if the new x,y positioning of the block will cause any collisions.
 	returns 1 if there is a collision, 0 otherwise. */
 int collides(int x, int y, UBYTE gameState[12][26], UBYTE block[4][4])
@@ -172,5 +189,14 @@ int collides(int x, int y, UBYTE gameState[12][26], UBYTE block[4][4])
 				   
 			}
 		}
+=======
+void vsync_wait(int x)
+{
+	int i;
+
+	for (i = 0; i < x; i++)
+	{
+		Vsync();
+>>>>>>> 0f4b6fba5ec7f6d7e5d0bcd6e839aa8854088b05
 	}
 }
