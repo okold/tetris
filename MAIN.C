@@ -52,10 +52,8 @@ int main()
 	UWORD *base16 = Physbase();
 	ULONG *base32 = Physbase();
 
-	/* 
-		Attempting to combine outOfBounds() and collides().
-		Creates a border around the actual playing area to simulate unavailable tiles.
-	*/
+	/*	Creates an initial 12 x 26 block game state matrix such that the 
+		'perimeter' is set to 1, otherwise set to 0. */
 	for(i = 0; i < 12; i++) {
 		for(j = 0; j < 26; j++) {
 			if(i == 0 || i == 11 ||
@@ -95,6 +93,7 @@ int main()
 				x -= 1;
 				for(i = 0; i < x + 4; i++) {
 					for(j = 0; j < y + 4; j++){
+						if()
 					}
 				}
 
@@ -148,6 +147,7 @@ int main()
 	return 0;
 }
 
+/*	Prints the current active game state to console */
 void printState(UBYTE arr[12][26]) 
 { 
     int i, j; 
@@ -158,3 +158,19 @@ void printState(UBYTE arr[12][26])
 		printf("\n");
 	}
 } 
+
+/*	Checks if the new x,y positioning of the block will cause any collisions.
+	returns 1 if there is a collision, 0 otherwise. */
+int collides(int x, int y, UBYTE gameState[12][26], UBYTE block[4][4])
+{
+	int i,j;
+	for(i = 0; i < 4; i++) {
+		for(j = 0; j < 4; j++){
+			if(gameState[i + x][j + y] == 1 &&
+			   block[i][j] == 1) 
+			{
+				   
+			}
+		}
+	}
+}
