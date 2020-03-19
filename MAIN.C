@@ -29,6 +29,7 @@
 #define SCORE_BOX_OFFSET_Y 10
 
 void printState(UBYTE arr[12][26]);
+int collides(int x, int y, UBYTE gameState[12][26], UBYTE block[4][4]);
 void vsync_wait(int x);
 
 int main()
@@ -39,7 +40,7 @@ int main()
 	int music_update = 10;
 	int block_speed = 1;
 	
-	int x = 0;
+	int x = ;
 	int old_x = 0;
 	int y = 0;
 	int old_y = 0;
@@ -92,18 +93,22 @@ int main()
 			if(key == 'a')
 			{
 				x -= 1;
-				for(i = 0; i < x + 4; i++) {
-					for(j = 0; j < y + 4; j++){
-						if()
-					}
+				if (collides(x, y, gameState, active_block) == 1) {
+					x = old_x;
 				}
 
 			} else if(key == 'd') {
 
 				x += 1;
+				if (collides(x, y, gameState, active_block) == 1) {
+					x = old_x;
+				}
 			} else if(key == 's') {
 
 				y += 1;
+				if (collides(x, y, gameState, active_block) == 1) {
+					y = old_y;
+				}
 			} else if(key == 'q') {
 
 				goto end;
@@ -175,7 +180,6 @@ void printState(UBYTE arr[12][26])
 	}
 } 
 
-<<<<<<< HEAD
 /*	Checks if the new x,y positioning of the block will cause any collisions.
 	returns 1 if there is a collision, 0 otherwise. */
 int collides(int x, int y, UBYTE gameState[12][26], UBYTE block[4][4])
@@ -186,10 +190,13 @@ int collides(int x, int y, UBYTE gameState[12][26], UBYTE block[4][4])
 			if(gameState[i + x][j + y] == 1 &&
 			   block[i][j] == 1) 
 			{
-				   
+				return 1;
 			}
 		}
-=======
+	}
+	return 0;
+}
+
 void vsync_wait(int x)
 {
 	int i;
@@ -197,6 +204,5 @@ void vsync_wait(int x)
 	for (i = 0; i < x; i++)
 	{
 		Vsync();
->>>>>>> 0f4b6fba5ec7f6d7e5d0bcd6e839aa8854088b05
 	}
 }
