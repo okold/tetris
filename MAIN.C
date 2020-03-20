@@ -8,6 +8,8 @@
 *   Winter 2020         Tyson Kendon
 */
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 #include <linea.h>
 #include <osbind.h>
 #include "drawlib.h"
@@ -17,7 +19,10 @@
 #include "audiolib.h"
 #include "input.h"
 
+#include <unistd.h>
+
 #define TILES 16
+#define OFFSET 12
 #define PLAY_AREA_ROWS 24
 #define PLAY_AREA_COLS 10
 #define PLAY_AREA_OFFSET_X 60
@@ -28,8 +33,11 @@
 #define SCORE_BOX_OFFSET_X 250
 #define SCORE_BOX_OFFSET_Y 10
 
-void printState(UBYTE arr[12][26]);
-int collides(int x, int y, UBYTE gameState[12][26], UBYTE block[4][4]);
+void nextBlock (UBYTE active_block[4][4], int block);
+void printState(UBYTE arr[12][25]);
+void updateState(int x, int y, UBYTE gameState[12][25], UBYTE block[4][4]);
+int collides(int x, int y, UBYTE gameState[12][25], UBYTE block[4][4]);
+int getRandom();
 void vsync_wait(int x);
 
 int main()
@@ -39,16 +47,19 @@ int main()
 	int music_counter = 0;
 	int music_update = 10;
 	int block_speed = 1;
-	
-	int x = ;
-	int old_x = 0;
+	int gameLoop = TRUE;
+
+	int block;
+	int x = 5;
+	int old_x = 1;
 	int y = 0;
+	int y_fine = 0;
 	int old_y = 0;
 	int key;
 	int i,j;
 
 	UBYTE active_block[4][4];
-	UBYTE gameState[12][26];
+	UBYTE gameState[12][25];
 
 	UBYTE *base8 = Physbase();
 	UWORD *base16 = Physbase();
@@ -57,9 +68,8 @@ int main()
 	/*	Creates an initial 12 x 26 block game state matrix such that the 
 		'perimeter' is set to 1, otherwise set to 0. */
 	for(i = 0; i < 12; i++) {
-		for(j = 0; j < 26; j++) {
-			if(i == 0 || i == 11 ||
-			   j == 0 || j == 25)
+		for(j = 0; j < 25; j++) {
+			if(i == 0 || i == 11 || j == 24)
 			{
 				gameState[i][j] = 1;
 			} else {
@@ -76,13 +86,19 @@ int main()
 	
 	draw_game_start(base16);
 
-	gen_z_block(active_block);
+	srand(time(0));			/* Time based RNG. */
+	block = getRandom();
+	nextBlock(active_block, block);
 
 	enable_channels();
 	play_music(music_counter); /* plays first note */
 
-	while (1)    
-	{	
+	while (gameLoop == TRUE)    
+	{
+		if(collides(x, y, gameState, active_block)) {
+			sleep(2);
+			gameLoop = FALSE;
+		}
 		old_x = x;
 		old_y = y;
 
@@ -93,49 +109,72 @@ int main()
 			if(key == 'a')
 			{
 				x -= 1;
-				if (collides(x, y, gameState, active_block) == 1) {
+				if (collides(x, y, gameState, active_block) == TRUE) {
 					x = old_x;
+				} else {
+					draw_blank_matrix((old_x + OFFSET) * TILES,y * TILES,active_block,base16);
+					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,base16);
 				}
 
 			} else if(key == 'd') {
 
 				x += 1;
-				if (collides(x, y, gameState, active_block) == 1) {
+				if (collides(x, y, gameState, active_block) == TRUE) {
 					x = old_x;
+				} else {
+					draw_blank_matrix((old_x + OFFSET) * TILES,y * TILES,active_block,base16);
+					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,base16);
 				}
 			} else if(key == 's') {
 
 				y += 1;
-				if (collides(x, y, gameState, active_block) == 1) {
+				if (collides(x, y, gameState, active_block) == TRUE) {
 					y = old_y;
+					updateState(x, y, gameState, active_block);
+					block = getRandom();
+					nextBlock(active_block, block);
+					x = 5;
+					y = 0;
+					y_fine = 0; 
+				} else {
+					draw_blank_matrix((x + OFFSET) * TILES,old_y * TILES,active_block,base16);
+					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,base16);
 				}
 			} else if(key == 'q') {
 
 				goto end;
+			} else if(key == 'e') {
+				if (slow_mo)
+				{
+					slow_mo = FALSE;
+				}
+				else
+				{
+					slow_mo = TRUE;
+				}
 			}
-			  else if(key == 'e') {
-				  if (slow_mo)
-				  {
-					  slow_mo = FALSE;
-				  }
-				  else
-				  {
-					  slow_mo = TRUE;
-				  }
-			  }
 		}
 
-		draw_blank_matrix(old_x * TILES,old_y * TILES,active_block,base16);
-		y += block_speed;			
-		draw_matrix(x * TILES,y * TILES,active_block,base16);
+		y_fine += block_speed;
+		if((y_fine % 16) == 0) {
+			y += 1;	
+			if (collides(x, y, gameState, active_block) == TRUE) {
+				y -= 1;
+				updateState(x, y, gameState, active_block);
+				block = getRandom();
+				nextBlock(active_block, block);
+				x = 5;
+				y = 0;
+				y_fine = 0;
+				draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,base16);
+
+			} else {		
+				draw_blank_matrix((old_x + OFFSET) * TILES,old_y * TILES,active_block,base16);
+				draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,base16);
+			}
+		}
 
 		Vsync(); 
-		
-		if (y * TILES >= 400)
-		{
-			y = 0;
-		}
-		
 		vsync_counter++;
 		if (vsync_counter % music_update == 0)
 		{
@@ -169,11 +208,11 @@ int main()
 }
 
 /*	Prints the current active game state to console */
-void printState(UBYTE arr[12][26]) 
+void printState(UBYTE arr[12][25]) 
 { 
     int i, j; 
     for (i = 0; i < 12; i++) {
-      	for (j = 0; j < 26; j++) { 
+      	for (j = 0; j < 25; j++) { 
         	printf("%d ", arr[i][j]);
 		} 
 		printf("\n");
@@ -182,7 +221,7 @@ void printState(UBYTE arr[12][26])
 
 /*	Checks if the new x,y positioning of the block will cause any collisions.
 	returns 1 if there is a collision, 0 otherwise. */
-int collides(int x, int y, UBYTE gameState[12][26], UBYTE block[4][4])
+int collides(int x, int y, UBYTE gameState[12][25], UBYTE block[4][4])
 {
 	int i,j;
 	for(i = 0; i < 4; i++) {
@@ -204,5 +243,58 @@ void vsync_wait(int x)
 	for (i = 0; i < x; i++)
 	{
 		Vsync();
+	}
+}
+
+/*	Updates the gameState matrix to reflect the permanent blocks in
+ *	the play area 
+*/
+void updateState(int x, int y, UBYTE gameState[12][25], UBYTE block[4][4])
+{
+	int i,j;
+	for(i = 0; i < 4; i++) {
+		for(j = 0; j < 4; j++){
+			if(block[i][j] == 1) {
+				gameState[i + x][j + y] = 1;
+			}
+		}
+	}
+}
+
+/*	Generates a random number from 1 to 7 inclusive.
+*	Each number represents one of the seven block shapes. 
+* 	Note: Uses time as seed for random renerator.
+*/
+int getRandom() {
+	int num = (rand() % 7) + 1;
+	return num;
+}
+
+/*	'Redraws' the active block matrix to the provided block number. */
+void nextBlock (UBYTE active_block[4][4], int block)
+{
+	switch(block)
+	{
+		case 1:
+			gen_i_block(active_block);
+			break;
+		case 2:
+			gen_j_block(active_block);
+			break;
+		case 3:
+			gen_l_block(active_block);
+			break;
+		case 4:
+			gen_o_block(active_block);
+			break;
+		case 5:
+			gen_s_block(active_block);
+			break;
+		case 6:
+			gen_t_block(active_block);
+			break;
+		case 7:
+			gen_z_block(active_block);
+			break;
 	}
 }
