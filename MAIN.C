@@ -21,6 +21,7 @@
 
 #include <unistd.h>
 
+#define N 4
 #define TILES 16
 #define OFFSET 12
 #define PLAY_AREA_ROWS 24
@@ -33,6 +34,7 @@
 #define SCORE_BOX_OFFSET_X 250
 #define SCORE_BOX_OFFSET_Y 10
 
+void rot90CW(UBYTE a[N][N]);
 void nextBlock (UBYTE active_block[4][4], int block);
 void printState(UBYTE arr[12][25]);
 void updateState(int x, int y, UBYTE gameState[12][25], UBYTE block[4][4]);
@@ -59,6 +61,7 @@ int main()
 	int i,j;
 
 	UBYTE active_block[4][4];
+	UBYTE old_aBlock[4][4];
 	UBYTE gameState[12][25];
 
 	UBYTE *base8 = Physbase();
@@ -140,6 +143,17 @@ int main()
 					draw_blank_matrix((x + OFFSET) * TILES,old_y * TILES,active_block,base16);
 					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,base16);
 				}
+			} else if(key == 'w') {
+				old_aBlock[4][4] = active_block[4][4];
+				rot90CW(active_block);
+				if(collides(x, y, gameState, active_block) == TRUE) {
+					active_block[4][4] = old_aBlock[4][4];
+				} else {
+					
+					draw_blank_matrix((x + OFFSET) * TILES,y * TILES,old_aBlock,base16);
+					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,base16);
+				}
+				
 			} else if(key == 'q') {
 
 				goto end;
@@ -259,7 +273,7 @@ void updateState(int x, int y, UBYTE gameState[12][25], UBYTE block[4][4])
 			}
 		}
 	}
-}
+} 
 
 /*	Generates a random number from 1 to 7 inclusive.
 *	Each number represents one of the seven block shapes. 
@@ -298,3 +312,31 @@ void nextBlock (UBYTE active_block[4][4], int block)
 			break;
 	}
 }
+
+/*	Rotate a block matrix 90 degress clockwise. 
+	Works for any N x N matrix, however this one is
+	always 4 x 4 and we can optimize it.
+	currently buggy - I think its just Steem sucking */
+void rot90CW(UBYTE a[N][N])
+{
+	
+	int i,j,temp;
+	for(i = 0; i < N / 2; i++) {
+		for(j = i; j < N - i - 1; j++) {
+			
+			temp = a[i][j];
+			a[i][j] = a[N - 1 - j][i];
+			a[N - 1 - j][i] = a[N - 1 - i][N - 1 - j];
+			a[N - 1 - i][N - 1 - j] = a[j][N - 1 - i];
+			a[j][N - 1 - i] = temp;
+		}
+	}
+}
+
+
+
+/*	Check if a row has been completed. 
+int rowComplete()
+{
+	return 0;
+} */

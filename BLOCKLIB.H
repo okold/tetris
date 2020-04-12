@@ -18,6 +18,7 @@
 
 #include "typedef.h"
 
+void copy_matrix(UBYTE src[][4], UBYTE dst[][4]);
 void gen_i_block(UBYTE matrix[][4]);
 void gen_j_block(UBYTE matrix[][4]);
 void gen_l_block(UBYTE matrix[][4]);
