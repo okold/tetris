@@ -9,8 +9,6 @@
 */
 #include "blocklib.h"
 
-void copy_matrix(UBYTE src[][4], UBYTE dst[][4]);
-
 /*  Block Matrices
 *   Note:   the array is in the format [x][y], but the way the arrays are
 *           declared statically, they're transposed visually in the code.

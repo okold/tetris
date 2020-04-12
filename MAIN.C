@@ -69,7 +69,7 @@ int main()
 	ULONG *base32 = Physbase();
 
 	/*	Creates an initial 12 x 26 block game state matrix such that the 
-		'perimeter' is set to 1, otherwise set to 0. */
+		'perimeter'(Excluding the "top" of the play area) is set to 1, otherwise set to 0. */
 	for(i = 0; i < 12; i++) {
 		for(j = 0; j < 25; j++) {
 			if(i == 0 || i == 11 || j == 24)
@@ -144,10 +144,12 @@ int main()
 					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,base16);
 				}
 			} else if(key == 'w') {
-				old_aBlock[4][4] = active_block[4][4];
+				/*old_aBlock[4][4] = active_block[4][4];*/
+				copy_matrix(active_block,old_aBlock);
 				rot90CW(active_block);
 				if(collides(x, y, gameState, active_block) == TRUE) {
-					active_block[4][4] = old_aBlock[4][4];
+					/*active_block[4][4] = old_aBlock[4][4];*/
+					copy_matrix(old_aBlock,active_block);
 				} else {
 					
 					draw_blank_matrix((x + OFFSET) * TILES,y * TILES,old_aBlock,base16);
@@ -261,7 +263,7 @@ void vsync_wait(int x)
 }
 
 /*	Updates the gameState matrix to reflect the permanent blocks in
- *	the play area 
+* 	the play area 
 */
 void updateState(int x, int y, UBYTE gameState[12][25], UBYTE block[4][4])
 {
