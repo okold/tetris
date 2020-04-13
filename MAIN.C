@@ -18,6 +18,7 @@
 #include "blocklib.h"
 #include "audiolib.h"
 #include "input.h"
+#include "buffer.h"
 
 #include <unistd.h>
 
@@ -42,9 +43,10 @@ int collides(int x, int y, UBYTE gameState[12][25], UBYTE block[4][4]);
 int getRandom();
 void vsync_wait(int x);
 
+UWORD buffer_array[2002];
+
 int main()
 {
-	int slow_mo = FALSE;
 	int vsync_counter = 0;
 	int music_counter = 0;
 	int music_update = 10;
@@ -64,9 +66,10 @@ int main()
 	UBYTE old_aBlock[4][4];
 	UBYTE gameState[12][25];
 
-	UBYTE *base8 = Physbase();
-	UWORD *base16 = Physbase();
-	ULONG *base32 = Physbase();
+	UWORD *base = Physbase();
+	UWORD *buffer = load_buffer();
+
+	Setscreen(-1,buffer,-1);
 
 	/*	Creates an initial 12 x 26 block game state matrix such that the 
 		'perimeter' is set to 1, otherwise set to 0. */
@@ -83,11 +86,11 @@ int main()
 
 	disable_cursor();          /* hide blinking text cursor */
 
-	fill_screen(base32, -1);     /* set screen to all black */
+	fill_screen(buffer, -1);     /* set screen to all black */
 
 	linea0();		   /* needs this, otherwise linea3() will crash the program */
 	
-	draw_game_start(base16);
+	draw_game_start(buffer);
 
 	srand(time(0));			/* Time based RNG. */
 	block = getRandom();
@@ -115,8 +118,8 @@ int main()
 				if (collides(x, y, gameState, active_block) == TRUE) {
 					x = old_x;
 				} else {
-					draw_blank_matrix((old_x + OFFSET) * TILES,y * TILES,active_block,base16);
-					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,base16);
+					draw_blank_matrix((old_x + OFFSET) * TILES,y * TILES,active_block,buffer);
+					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,buffer);
 				}
 
 			} else if(key == 'd') {
@@ -125,8 +128,8 @@ int main()
 				if (collides(x, y, gameState, active_block) == TRUE) {
 					x = old_x;
 				} else {
-					draw_blank_matrix((old_x + OFFSET) * TILES,y * TILES,active_block,base16);
-					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,base16);
+					draw_blank_matrix((old_x + OFFSET) * TILES,y * TILES,active_block,buffer);
+					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,buffer);
 				}
 			} else if(key == 's') {
 
@@ -140,8 +143,8 @@ int main()
 					y = 0;
 					y_fine = 0; 
 				} else {
-					draw_blank_matrix((x + OFFSET) * TILES,old_y * TILES,active_block,base16);
-					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,base16);
+					draw_blank_matrix((x + OFFSET) * TILES,old_y * TILES,active_block,buffer);
+					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,buffer);
 				}
 			} else if(key == 'w') {
 				old_aBlock[4][4] = active_block[4][4];
@@ -150,22 +153,13 @@ int main()
 					active_block[4][4] = old_aBlock[4][4];
 				} else {
 					
-					draw_blank_matrix((x + OFFSET) * TILES,y * TILES,old_aBlock,base16);
-					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,base16);
+					draw_blank_matrix((x + OFFSET) * TILES,y * TILES,old_aBlock,buffer);
+					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,buffer);
 				}
 				
 			} else if(key == 'q') {
 
 				goto end;
-			} else if(key == 'e') {
-				if (slow_mo)
-				{
-					slow_mo = FALSE;
-				}
-				else
-				{
-					slow_mo = TRUE;
-				}
 			}
 		}
 
@@ -180,11 +174,11 @@ int main()
 				x = 5;
 				y = 0;
 				y_fine = 0;
-				draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,base16);
+				draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,buffer);
 
 			} else {		
-				draw_blank_matrix((old_x + OFFSET) * TILES,old_y * TILES,active_block,base16);
-				draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,base16);
+				draw_blank_matrix((old_x + OFFSET) * TILES,old_y * TILES,active_block,buffer);
+				draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,buffer);
 			}
 		}
 
@@ -206,17 +200,12 @@ int main()
 			}
 			play_music(music_counter);
 		}
-
-		if (slow_mo)
-		{
-			vsync_wait(10); /* for debug, slows the game down*/
-		}
-		
 	}
 
 	end:
 	silence();
-	fill_screen(base32, 0);      /* set screen to all white */
+	Setscreen(-1,base,-1);
+	fill_screen(base, 0);      /* set screen to all white */
 	printState(gameState);
 	return 0;
 }
