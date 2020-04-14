@@ -41,6 +41,7 @@ void updateState(int x, int y, UBYTE gameState[12][25], UBYTE block[4][4]);
 int collides(int x, int y, UBYTE gameState[12][25], UBYTE block[4][4]);
 int getRandom();
 void vsync_wait(int x);
+void lineComplete(UBYTE gameState[12][25], int y, UWORD *base);
 
 int main()
 {
@@ -134,6 +135,7 @@ int main()
 				if (collides(x, y, gameState, active_block) == TRUE) {
 					y = old_y;
 					updateState(x, y, gameState, active_block);
+					lineComplete(gameState, y, base16);
 					block = getRandom();
 					nextBlock(active_block, block);
 					x = 5;
@@ -144,11 +146,9 @@ int main()
 					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,base16);
 				}
 			} else if(key == 'w') {
-				/*old_aBlock[4][4] = active_block[4][4];*/
 				copy_matrix(active_block,old_aBlock);
 				rot90CW(active_block);
 				if(collides(x, y, gameState, active_block) == TRUE) {
-					/*active_block[4][4] = old_aBlock[4][4];*/
 					copy_matrix(old_aBlock,active_block);
 				} else {
 					
@@ -177,6 +177,7 @@ int main()
 			if (collides(x, y, gameState, active_block) == TRUE) {
 				y -= 1;
 				updateState(x, y, gameState, active_block);
+				lineComplete(gameState, y, base16);
 				block = getRandom();
 				nextBlock(active_block, block);
 				x = 5;
@@ -315,10 +316,7 @@ void nextBlock (UBYTE active_block[4][4], int block)
 	}
 }
 
-/*	Rotate a block matrix 90 degress clockwise. 
-	Works for any N x N matrix, however this one is
-	always 4 x 4 and we can optimize it.
-	currently buggy - I think its just Steem sucking */
+/*	Rotate a block matrix 90 degress clockwise. */
 void rot90CW(UBYTE a[N][N])
 {
 	
@@ -335,10 +333,34 @@ void rot90CW(UBYTE a[N][N])
 	}
 }
 
-
-
-/*	Check if a row has been completed. 
-int rowComplete()
+/*	Check if a row has been completed and clears it if so. */
+void lineComplete(UBYTE gameState[12][25], int y, UWORD *base)
 {
-	return 0;
-} */
+	int i,j,cap,dif;
+	int counter = 0;
+	/* Ensures no lines outside of the play area are checked */
+	if(y > 20) {
+		dif = y - 20;
+		cap = y + 4 - dif;
+	} else {
+		cap = y + 4;
+	}
+
+	for(j = y; j < cap; j++) {
+		for(i = 1; i < 11; i++){
+			if(gameState[i][j] == 1) {
+				counter++;
+			}
+		}
+
+		if(counter == 10) {
+			for(i = 1; i < 11; i++) {
+				gameState[i][j] = 0;
+			}
+			clear_line(j, base); 	/* Visually deletes the completed line */
+		}
+		counter = 0;
+	}
+} 
+
+/* gameDrop */

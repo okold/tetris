@@ -45,5 +45,5 @@ void draw_bitmap(UWORD *base, int x, int y,
 void disable_cursor();
 void fill_screen(ULONG *base, char pattern);
 void draw_game_start(UWORD *base);
-
+void clear_line(int y, UWORD *base);
 #endif

@@ -259,3 +259,13 @@ void disable_cursor()
 	printf("\033f"); /* i still don't get what this does */
 	fflush(stdout);
 }
+
+/*	Clears the line at the given y value*/
+void clear_line(int y, UWORD *base)
+{
+    int i;
+    for (i = 1; i < 11; i++)
+    {
+        draw_blank_block(base, (i + 12) * 16, y * 16);
+    } 
+}
