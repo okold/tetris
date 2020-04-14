@@ -40,10 +40,11 @@ void updateState(int x, int y, UBYTE gameState[12][25], UBYTE block[4][4]);
 int collides(int x, int y, UBYTE gameState[12][25], UBYTE block[4][4]);
 int getRandom();
 void vsync_wait(int x);
-void clearLines(UBYTE gameState[12][25], int y, UWORD *base);
+int clearLines(UBYTE gameState[12][25], int y, UWORD *base);
 void drop(int start, int stop, UBYTE gameState[12][25]);
 void draw_updated_state(UWORD* base, UBYTE gameState[12][25], UBYTE state_to_update[12][25]);
 void redraw_state(UWORD* base, UBYTE gameState[12][25]);
+int getMaxHeight(UBYTE gameState[12][25]);
 
 static volatile long *vsync_counter = 0x462;
 
@@ -71,6 +72,7 @@ int main()
 	int key;
 	int i,j;
 	int topStateStart,topStateEnd,anchor;
+	int maxHeight;
 
 	UBYTE active_block[4][4];
 	UBYTE old_aBlock[4][4];
@@ -165,6 +167,7 @@ int main()
 					y = old_y;
 					updateState(x, y, gameState, active_block);
 					clearLines(gameState, y, base);
+					maxHeight = getMaxHeight(gameState);
 					block = getRandom();
 					nextBlock(active_block, block);
 					x = 5;
@@ -209,6 +212,7 @@ int main()
 					y -= 1;
 					updateState(x, y, gameState, active_block);
 					clearLines(gameState, y, base);
+					maxHeight = getMaxHeight(gameState);
 					block = getRandom();
 					nextBlock(active_block, block);
 					x = 5;
@@ -297,6 +301,7 @@ int main()
 	fill_screen(base, 0);      /* set screen to all white */
 	Setscreen(-1,base,-1);
 	printState(gameState);
+	printf("Current height: %d\n", maxHeight);
 	return 0;
 }
 
@@ -408,12 +413,14 @@ void rot90CW(UBYTE a[N][N])
 }
 
 /*	Check if a row has been completed and clears it if so.
-	Returns the y value of the first cleared line. */
-void clearLines(UBYTE gameState[12][25], int y, UWORD *base)
+	Returns true if 1 or more lines were cleared, false otherwise. */
+int clearLines(UBYTE gameState[12][25], int y, UWORD *base)
 {
 	int i,j,cap,dif;
 	int counter = 0;
 	int lineNum = 0;
+	int flag = FALSE; 
+
 	/* Ensures no lines outside of the play area are checked */
 	if(y > 20) {
 		dif = y - 20;
@@ -430,16 +437,14 @@ void clearLines(UBYTE gameState[12][25], int y, UWORD *base)
 		}
 
 		if(counter == 10) {
-			/*
-			for(i = 1; i < 11; i++) {
-				gameState[i][j] = 0;
-			} */
 			drop(j, lineNum, gameState);
 			lineNum++;
-			clear_line(j, base); 	/* Visually deletes the completed line */
+			flag = TRUE;
+			/* clear_line(j, base);  Visually deletes the completed line */
 		}
 		counter = 0;
 	}
+	return flag;
 } 
 
 /*	Drops each line in the above the cleared line down one in the gamestate.
@@ -456,6 +461,20 @@ void drop(int start, int stop, UBYTE gameState[12][25])
 			}
 		}
 	}
+}
+
+int getMaxHeight(UBYTE gameState[12][25])
+{
+	int i,j;
+	for(j = 0; j < 24; j++) {
+		for(i = 1; i < 11; i++) {
+			if(gameState[i][j] == 1) {
+				return j;
+			}
+		}
+	}
+	/* Possibly return -1 or 23 (lowest line) if no blocks exist*/
+	return -1;
 }
 
 void draw_updated_state(UWORD* base, UBYTE gameState[12][25], UBYTE state_to_update[12][25])
