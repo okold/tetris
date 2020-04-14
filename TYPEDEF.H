@@ -2,6 +2,7 @@
 #define TYPEDEF_H
 
 #define BYTES_PER_SCREEN 32000
+#define WORDS_PER_SCREEN 16000
 #define BLOCK_HEIGHT 16
 
 #define SOLID 0xFFFF

@@ -43,7 +43,7 @@ void draw_blank_matrix(int x, int y, UBYTE matrix[][4], UWORD *base);
 void draw_bitmap(UWORD *base, int x, int y,
 				  const UWORD *bitmap, unsigned int height, short mode);
 void disable_cursor();
-void fill_screen(ULONG *base, char pattern);
+void fill_screen(UWORD *base, char pattern);
 void draw_game_start(UWORD *base);
 
 #endif

@@ -43,8 +43,6 @@ int collides(int x, int y, UBYTE gameState[12][25], UBYTE block[4][4]);
 int getRandom();
 void vsync_wait(int x);
 
-UWORD buffer_array[2002];
-
 int main()
 {
 	int vsync_counter = 0;
@@ -66,10 +64,12 @@ int main()
 	UBYTE old_aBlock[4][4];
 	UBYTE gameState[12][25];
 
-	UWORD *base = Physbase();
 	UWORD *buffer = load_buffer();
+	UWORD *base = Physbase();
+	UWORD *current_buffer = base;
+	UWORD *back_buffer = buffer;
 
-	Setscreen(-1,buffer,-1);
+	disable_cursor();          /* hide blinking text cursor */
 
 	/*	Creates an initial 12 x 26 block game state matrix such that the 
 		'perimeter' is set to 1, otherwise set to 0. */
@@ -84,13 +84,11 @@ int main()
 		}
 	}
 
-	disable_cursor();          /* hide blinking text cursor */
-
 	fill_screen(buffer, -1);     /* set screen to all black */
+	fill_screen(base, -1);
 
-	linea0();		   /* needs this, otherwise linea3() will crash the program */
-	
 	draw_game_start(buffer);
+	draw_game_start(base);
 
 	srand(time(0));			/* Time based RNG. */
 	block = getRandom();
@@ -118,8 +116,8 @@ int main()
 				if (collides(x, y, gameState, active_block) == TRUE) {
 					x = old_x;
 				} else {
-					draw_blank_matrix((old_x + OFFSET) * TILES,y * TILES,active_block,buffer);
-					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,buffer);
+					draw_blank_matrix((old_x + OFFSET) * TILES,y * TILES,active_block,back_buffer);
+					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,back_buffer);
 				}
 
 			} else if(key == 'd') {
@@ -128,8 +126,8 @@ int main()
 				if (collides(x, y, gameState, active_block) == TRUE) {
 					x = old_x;
 				} else {
-					draw_blank_matrix((old_x + OFFSET) * TILES,y * TILES,active_block,buffer);
-					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,buffer);
+					draw_blank_matrix((old_x + OFFSET) * TILES,y * TILES,active_block,back_buffer);
+					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,back_buffer);
 				}
 			} else if(key == 's') {
 
@@ -143,8 +141,8 @@ int main()
 					y = 0;
 					y_fine = 0; 
 				} else {
-					draw_blank_matrix((x + OFFSET) * TILES,old_y * TILES,active_block,buffer);
-					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,buffer);
+					draw_blank_matrix((x + OFFSET) * TILES,old_y * TILES,active_block,back_buffer);
+					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,back_buffer);
 				}
 			} else if(key == 'w') {
 				old_aBlock[4][4] = active_block[4][4];
@@ -153,8 +151,8 @@ int main()
 					active_block[4][4] = old_aBlock[4][4];
 				} else {
 					
-					draw_blank_matrix((x + OFFSET) * TILES,y * TILES,old_aBlock,buffer);
-					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,buffer);
+					draw_blank_matrix((x + OFFSET) * TILES,y * TILES,old_aBlock,back_buffer);
+					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,back_buffer);
 				}
 				
 			} else if(key == 'q') {
@@ -177,10 +175,23 @@ int main()
 				draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,buffer);
 
 			} else {		
-				draw_blank_matrix((old_x + OFFSET) * TILES,old_y * TILES,active_block,buffer);
-				draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,buffer);
+				draw_blank_matrix((old_x + OFFSET) * TILES,old_y * TILES,active_block,back_buffer);
+				draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,back_buffer);
 			}
 		}
+
+		if (current_buffer == base)
+		{
+			current_buffer = buffer;
+			back_buffer = base;
+
+		}
+		else
+		{
+			current_buffer = base;
+			back_buffer = buffer;
+		}
+		Setscreen(-1,current_buffer,-1);
 
 		Vsync(); 
 		vsync_counter++;
@@ -206,6 +217,8 @@ int main()
 	silence();
 	Setscreen(-1,base,-1);
 	fill_screen(base, 0);      /* set screen to all white */
+		printf("%p\n",base);
+    printf("%p\n",buffer);
 	printState(gameState);
 	return 0;
 }
@@ -321,8 +334,6 @@ void rot90CW(UBYTE a[N][N])
 		}
 	}
 }
-
-
 
 /*	Check if a row has been completed. 
 int rowComplete()

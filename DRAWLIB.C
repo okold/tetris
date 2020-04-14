@@ -245,12 +245,12 @@ void draw_bitmap(UWORD *base, int x, int y,
 	}
 }
 
-void fill_screen(ULONG *base, char pattern)
+void fill_screen(UWORD *base, char pattern)
 {
 	register int i = 0;
-	register ULONG *loc = base;
+	register UWORD *loc = base;
 
-	while (i++ < BYTES_PER_SCREEN)
+	while (i++ < WORDS_PER_SCREEN)
 		*(loc++) = pattern;
 }
 
