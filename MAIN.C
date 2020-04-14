@@ -185,8 +185,8 @@ int main()
 		{
 			/* hit the top of the play area, end game (?) */
 			if(collides(x, y, gameState, active_block)) {
-				sleep(2);
 				silence();
+				sleep(2);
 				gameLoop = FALSE;
 			}
 			old_x = x;
@@ -216,13 +216,9 @@ int main()
 			update_col_end = x + 4;
 		}
 
-		if (state_updated)
-		{
-			draw_state(x, y, gameState, active_block, back_buffer, update_row_start, update_row_end, update_col_start, update_col_end);
-		}
-		
-		draw_blank_matrix((old_x + OFFSET) * TILES, old_y * TILES, block, back_buffer);
-		draw_matrix((x + OFFSET) * TILES,y * TILES,block,back_buffer);
+		draw_state(x, y, gameState, active_block, back_buffer, update_row_start - 1, update_row_end + 1, update_col_start - 1, update_col_end + 1);
+
+
 
 		/* checks for the next frame */
 		old_super = Super(0);
@@ -279,6 +275,8 @@ int main()
 			Super(old_super);
 		}
 	}
+
+		
 
 	end:
 	silence();
@@ -408,9 +406,9 @@ void rot90CW(UBYTE a[N][N])
 void draw_state(int x, int y, UBYTE gameState[12][25], UBYTE block[4][4], UWORD *base, int row_start, int row_end, int col_start, int col_end)
 {
 	int i,j;
-	for (i = col_start; i > 1 && i < col_end && i < 12; i++)
+	for (i = col_start; i > 1 && i < col_end && i < 11; i++)
 	{
-		for (j = row_start; j > 0 && j <= row_end && j < 25; j++)
+		for (j = row_start; j > 0 && j <= row_end && j < 24; j++)
 		{
 			if (gameState[i][j] == 0)
 			{
@@ -422,6 +420,7 @@ void draw_state(int x, int y, UBYTE gameState[12][25], UBYTE block[4][4], UWORD 
 			}
 		}
 	}
+	draw_matrix((x + OFFSET) * TILES,y * TILES,block,base);
 } 
 
 /*	Check if a row has been completed. 
