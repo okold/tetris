@@ -41,7 +41,11 @@ void updateState(int x, int y, UBYTE gameState[12][25], UBYTE block[4][4]);
 int collides(int x, int y, UBYTE gameState[12][25], UBYTE block[4][4]);
 int getRandom();
 void vsync_wait(int x);
-void lineComplete(UBYTE gameState[12][25], int y, UWORD *base);
+int clearLines(UBYTE gameState[12][25], int y, UWORD *base);
+void dropTopState(int height, int anchor, UBYTE gameState[12][25], UBYTE topState[10][24]);
+UBYTE * buildTopState(int start_y, int end_y, UBYTE gameState[12][25]);
+int getNextLineIndex(int start_y, UBYTE gameState[12][25]);
+
 
 int main()
 {
@@ -60,10 +64,12 @@ int main()
 	int old_y = 0;
 	int key;
 	int i,j;
+	int topStateStart,topStateEnd,anchor;
 
 	UBYTE active_block[4][4];
 	UBYTE old_aBlock[4][4];
 	UBYTE gameState[12][25];
+	UBYTE * topState;
 
 	UBYTE *base8 = Physbase();
 	UWORD *base16 = Physbase();
@@ -135,7 +141,13 @@ int main()
 				if (collides(x, y, gameState, active_block) == TRUE) {
 					y = old_y;
 					updateState(x, y, gameState, active_block);
-					lineComplete(gameState, y, base16);
+					topStateEnd = clearLines(gameState, y, base16);
+					if(topStateEnd != -1) {
+						topStateStart = getNextLineIndex(0, gameState);
+						anchor = getNextLineIndex(topStateEnd, gameState);
+						topState = buildTopState(topStateStart, topStateEnd, gameState);
+						dropTopState(topStateEnd - topStateStart, anchor, gameState, topState);
+					}
 					block = getRandom();
 					nextBlock(active_block, block);
 					x = 5;
@@ -177,7 +189,13 @@ int main()
 			if (collides(x, y, gameState, active_block) == TRUE) {
 				y -= 1;
 				updateState(x, y, gameState, active_block);
-				lineComplete(gameState, y, base16);
+				topStateEnd = clearLines(gameState, y, base16);
+				if(topStateEnd != -1) {
+					topStateStart = getNextLineIndex(0, gameState);
+					anchor = getNextLineIndex(topStateEnd, gameState);
+					topState = buildTopState(topStateStart, topStateEnd, gameState);
+					dropTopState(topStateEnd - topStateStart, anchor, gameState, topState);
+				}
 				block = getRandom();
 				nextBlock(active_block, block);
 				x = 5;
@@ -256,7 +274,6 @@ int collides(int x, int y, UBYTE gameState[12][25], UBYTE block[4][4])
 void vsync_wait(int x)
 {
 	int i;
-
 	for (i = 0; i < x; i++)
 	{
 		Vsync();
@@ -288,7 +305,7 @@ int getRandom() {
 }
 
 /*	'Redraws' the active block matrix to the provided block number. */
-void nextBlock (UBYTE active_block[4][4], int block)
+void nextBlock(UBYTE active_block[4][4], int block)
 {
 	switch(block)
 	{
@@ -319,7 +336,6 @@ void nextBlock (UBYTE active_block[4][4], int block)
 /*	Rotate a block matrix 90 degress clockwise. */
 void rot90CW(UBYTE a[N][N])
 {
-	
 	int i,j,temp;
 	for(i = 0; i < N / 2; i++) {
 		for(j = i; j < N - i - 1; j++) {
@@ -333,11 +349,14 @@ void rot90CW(UBYTE a[N][N])
 	}
 }
 
-/*	Check if a row has been completed and clears it if so. */
-void lineComplete(UBYTE gameState[12][25], int y, UWORD *base)
+/*	Check if a row has been completed and clears it if so.
+	Returns the y value of the first cleared line. */
+int clearLines(UBYTE gameState[12][25], int y, UWORD *base)
 {
 	int i,j,cap,dif;
+	int startIndex = -1;
 	int counter = 0;
+	int started = FALSE;
 	/* Ensures no lines outside of the play area are checked */
 	if(y > 20) {
 		dif = y - 20;
@@ -354,6 +373,10 @@ void lineComplete(UBYTE gameState[12][25], int y, UWORD *base)
 		}
 
 		if(counter == 10) {
+			if(started == FALSE) {
+				started = TRUE;
+				startIndex = j;
+			}
 			for(i = 1; i < 11; i++) {
 				gameState[i][j] = 0;
 			}
@@ -361,6 +384,49 @@ void lineComplete(UBYTE gameState[12][25], int y, UWORD *base)
 		}
 		counter = 0;
 	}
+	return startIndex;
 } 
 
 /* gameDrop */
+
+/*	Gets the index, j, of the first line that has 1 or more blocks.
+	Starts scan from the provided index, start_y. */
+int getNextLineIndex(int start_y, UBYTE gameState[12][25])
+{
+	int i,j;
+	for(j = start_y; j < 24; j++) {
+		for(i = 1; i < 11; i++) {
+			if(gameState[i][j] == 1) {
+				return j;
+			}
+		}
+	}
+}
+
+/*	Builds a matrix of the state of the blocks above the 
+	previously cleared lines. */
+UBYTE * buildTopState(int start_y, int end_y, UBYTE gameState[12][25]) 
+{	
+	int i,j;
+	UBYTE topState[10][24];
+	for(j = start_y; j < end_y; j++) {
+		for(i = 1; i < 11; i++) {
+			topState[i - 1][j - start_y] = gameState[i][j];
+			gameState[i][j] = 0;
+		}
+	}
+
+	return * topState;
+}
+
+/*	Updates the game state to represent the play area after the
+	top state has been dropped. */
+void dropTopState(int height, int anchor, UBYTE gameState[12][25], UBYTE topState[10][24])
+{
+	int i,j;
+	for(j = anchor - height; j < anchor; j++) {
+		for(i = 1; i < 11; i++) {
+			gameState[i][j] = topState[i - 1][j - (anchor - height)];
+		}
+	}
+}
