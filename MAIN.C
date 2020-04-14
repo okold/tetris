@@ -53,6 +53,8 @@ int getNextLineIndex(int start_y, UBYTE gameState[12][25]);
 int main()
 {
 	int slow_mo = FALSE;
+	int sound_effect_length = 3;
+	int sound_effect_counter = 0;
 	int vsync_counter = 0;
 	int music_counter = 0;
 	int music_update = 10;
@@ -124,6 +126,8 @@ int main()
 				x -= 1;
 				if (collides(x, y, gameState, active_block) == TRUE) {
 					x = old_x;
+					enable_sound_effect();
+					sound_effect_counter = sound_effect_length;
 				} else {
 					draw_blank_matrix((old_x + OFFSET) * TILES,y * TILES,active_block,base16);
 					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,base16);
@@ -134,6 +138,8 @@ int main()
 				x += 1;
 				if (collides(x, y, gameState, active_block) == TRUE) {
 					x = old_x;
+					enable_sound_effect();
+					sound_effect_counter = sound_effect_length;
 				} else {
 					draw_blank_matrix((old_x + OFFSET) * TILES,y * TILES,active_block,base16);
 					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,base16);
@@ -149,7 +155,9 @@ int main()
 					nextBlock(active_block, block);
 					x = 5;
 					y = 0;
-					y_fine = 0; 
+					y_fine = 0;
+					enable_sound_effect();
+					sound_effect_counter = sound_effect_length;
 				} else {
 					draw_blank_matrix((x + OFFSET) * TILES,old_y * TILES,active_block,base16);
 					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,base16);
@@ -193,6 +201,8 @@ int main()
 				y = 0;
 				y_fine = 0;
 				draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,base16);
+				enable_sound_effect();
+				sound_effect_counter = sound_effect_length;
 
 			} else {		
 				draw_blank_matrix((old_x + OFFSET) * TILES,old_y * TILES,active_block,base16);
@@ -217,6 +227,15 @@ int main()
 				}
 			}
 			play_music(music_counter);
+		}
+
+		if (sound_effect_counter > 0)
+		{
+			sound_effect_counter--;
+			if (sound_effect_counter == 0)
+			{
+				disable_sound_effect();
+			}
 		}
 
 		if (slow_mo)
