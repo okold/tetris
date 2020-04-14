@@ -41,11 +41,14 @@ void updateState(int x, int y, UBYTE gameState[12][25], UBYTE block[4][4]);
 int collides(int x, int y, UBYTE gameState[12][25], UBYTE block[4][4]);
 int getRandom();
 void vsync_wait(int x);
-int clearLines(UBYTE gameState[12][25], int y, UWORD *base);
+void clearLines(UBYTE gameState[12][25], int y, UWORD *base);
+void drop(int start, int stop, UBYTE gameState[12][25]);
+
+/*
 void dropTopState(int height, int anchor, UBYTE gameState[12][25], UBYTE topState[10][24]);
 UBYTE * buildTopState(int start_y, int end_y, UBYTE gameState[12][25]);
 int getNextLineIndex(int start_y, UBYTE gameState[12][25]);
-
+*/
 
 int main()
 {
@@ -141,13 +144,7 @@ int main()
 				if (collides(x, y, gameState, active_block) == TRUE) {
 					y = old_y;
 					updateState(x, y, gameState, active_block);
-					topStateEnd = clearLines(gameState, y, base16);
-					if(topStateEnd != -1) {
-						topStateStart = getNextLineIndex(0, gameState);
-						anchor = getNextLineIndex(topStateEnd, gameState);
-						topState = buildTopState(topStateStart, topStateEnd, gameState);
-						dropTopState(topStateEnd - topStateStart, anchor, gameState, topState);
-					}
+					clearLines(gameState, y, base16);
 					block = getRandom();
 					nextBlock(active_block, block);
 					x = 5;
@@ -189,13 +186,7 @@ int main()
 			if (collides(x, y, gameState, active_block) == TRUE) {
 				y -= 1;
 				updateState(x, y, gameState, active_block);
-				topStateEnd = clearLines(gameState, y, base16);
-				if(topStateEnd != -1) {
-					topStateStart = getNextLineIndex(0, gameState);
-					anchor = getNextLineIndex(topStateEnd, gameState);
-					topState = buildTopState(topStateStart, topStateEnd, gameState);
-					dropTopState(topStateEnd - topStateStart, anchor, gameState, topState);
-				}
+				clearLines(gameState, y, base16);
 				block = getRandom();
 				nextBlock(active_block, block);
 				x = 5;
@@ -351,12 +342,11 @@ void rot90CW(UBYTE a[N][N])
 
 /*	Check if a row has been completed and clears it if so.
 	Returns the y value of the first cleared line. */
-int clearLines(UBYTE gameState[12][25], int y, UWORD *base)
+void clearLines(UBYTE gameState[12][25], int y, UWORD *base)
 {
 	int i,j,cap,dif;
-	int startIndex = -1;
 	int counter = 0;
-	int started = FALSE;
+	int lineNum = 0;
 	/* Ensures no lines outside of the play area are checked */
 	if(y > 20) {
 		dif = y - 20;
@@ -373,60 +363,30 @@ int clearLines(UBYTE gameState[12][25], int y, UWORD *base)
 		}
 
 		if(counter == 10) {
-			if(started == FALSE) {
-				started = TRUE;
-				startIndex = j;
-			}
+			/*
 			for(i = 1; i < 11; i++) {
 				gameState[i][j] = 0;
-			}
+			} */
+			drop(j, lineNum, gameState);
+			lineNum++;
 			clear_line(j, base); 	/* Visually deletes the completed line */
 		}
 		counter = 0;
 	}
-	return startIndex;
 } 
 
-/* gameDrop */
-
-/*	Gets the index, j, of the first line that has 1 or more blocks.
-	Starts scan from the provided index, start_y. */
-int getNextLineIndex(int start_y, UBYTE gameState[12][25])
+/*	Drops each line in the above the cleared line down one in the gamestate.
+	Zeroes the appro */
+void drop(int start, int stop, UBYTE gameState[12][25])
 {
 	int i,j;
-	for(j = start_y; j < 24; j++) {
+	for(j = start; j >= stop; j--) {
 		for(i = 1; i < 11; i++) {
-			if(gameState[i][j] == 1) {
-				return j;
+			if(j == stop) {
+				gameState[i][j] = 0;
+			} else {
+				gameState[i][j] = gameState[i][j - 1];
 			}
-		}
-	}
-}
-
-/*	Builds a matrix of the state of the blocks above the 
-	previously cleared lines. */
-UBYTE * buildTopState(int start_y, int end_y, UBYTE gameState[12][25]) 
-{	
-	int i,j;
-	UBYTE topState[10][24];
-	for(j = start_y; j < end_y; j++) {
-		for(i = 1; i < 11; i++) {
-			topState[i - 1][j - start_y] = gameState[i][j];
-			gameState[i][j] = 0;
-		}
-	}
-
-	return * topState;
-}
-
-/*	Updates the game state to represent the play area after the
-	top state has been dropped. */
-void dropTopState(int height, int anchor, UBYTE gameState[12][25], UBYTE topState[10][24])
-{
-	int i,j;
-	for(j = anchor - height; j < anchor; j++) {
-		for(i = 1; i < 11; i++) {
-			gameState[i][j] = topState[i - 1][j - (anchor - height)];
 		}
 	}
 }
