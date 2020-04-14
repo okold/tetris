@@ -42,14 +42,21 @@ void updateState(int x, int y, UBYTE gameState[12][25], UBYTE block[4][4]);
 int collides(int x, int y, UBYTE gameState[12][25], UBYTE block[4][4]);
 int getRandom();
 void vsync_wait(int x);
+void draw_state(int x, int y, UBYTE gameState[12][25], UBYTE block[4][4], UWORD *base, int row_start, int row_end, int col_start, int col_end);
+
+static volatile long *vsync_counter = 0x462;
 
 int main()
 {
-	int vsync_counter = 0;
+	long old_super, current_vsync;
+	int sound_counter = 0;
 	int music_counter = 0;
 	int music_update = 10;
-	int block_speed = 1;
 	int gameLoop = TRUE;
+	int state_updated, rotating = FALSE;
+
+	int update_row_start, update_row_end;
+	int update_col_start, update_col_end;
 
 	int block;
 	int x = 5;
@@ -59,6 +66,9 @@ int main()
 	int old_y = 0;
 	int key;
 	int i,j;
+
+	int fall_delay = 1;
+	int fall_counter = 0;
 
 	UBYTE active_block[4][4];
 	UBYTE old_aBlock[4][4];
@@ -97,27 +107,27 @@ int main()
 	enable_channels();
 	play_music(music_counter); /* plays first note */
 
+	old_super = Super(0);
+	current_vsync = *vsync_counter;
+	Super(old_super);
+
 	while (gameLoop == TRUE)    
 	{
-		if(collides(x, y, gameState, active_block)) {
-			sleep(2);
-			gameLoop = FALSE;
-		}
-		old_x = x;
-		old_y = y;
-
+		/* checks input */
 		if(is_pressed())
 		{	
 			key = read_key();
-
 			if(key == 'a')
 			{
 				x -= 1;
 				if (collides(x, y, gameState, active_block) == TRUE) {
 					x = old_x;
 				} else {
-					draw_blank_matrix((old_x + OFFSET) * TILES,y * TILES,active_block,back_buffer);
-					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,back_buffer);
+					update_row_start = y;
+					update_row_end = y + 4;
+					update_col_start = x;
+					update_col_end = old_x + 4;
+					state_updated = TRUE;
 				}
 
 			} else if(key == 'd') {
@@ -126,8 +136,11 @@ int main()
 				if (collides(x, y, gameState, active_block) == TRUE) {
 					x = old_x;
 				} else {
-					draw_blank_matrix((old_x + OFFSET) * TILES,y * TILES,active_block,back_buffer);
-					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,back_buffer);
+					update_row_start = y;
+					update_row_end = y + 4;
+					update_col_start = old_x;
+					update_col_end = x + 4;
+					state_updated = TRUE;
 				}
 			} else if(key == 's') {
 
@@ -141,8 +154,11 @@ int main()
 					y = 0;
 					y_fine = 0; 
 				} else {
-					draw_blank_matrix((x + OFFSET) * TILES,old_y * TILES,active_block,back_buffer);
-					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,back_buffer);
+					update_row_start = old_y;
+					update_row_end = y + 4;
+					update_col_start = x;
+					update_col_end = x + 4;
+					state_updated = TRUE;
 				}
 			} else if(key == 'w') {
 				old_aBlock[4][4] = active_block[4][4];
@@ -150,9 +166,12 @@ int main()
 				if(collides(x, y, gameState, active_block) == TRUE) {
 					active_block[4][4] = old_aBlock[4][4];
 				} else {
-					
-					draw_blank_matrix((x + OFFSET) * TILES,y * TILES,old_aBlock,back_buffer);
-					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,back_buffer);
+					state_updated = TRUE;
+					rotating = TRUE;
+					update_row_start = y;
+					update_row_end = y + 4;
+					update_col_start = x;
+					update_col_end = x + 4;
 				}
 				
 			} else if(key == 'q') {
@@ -161,55 +180,103 @@ int main()
 			}
 		}
 
-		y_fine += block_speed;
-		if((y_fine % 16) == 0) {
-			y += 1;	
-			if (collides(x, y, gameState, active_block) == TRUE) {
-				y -= 1;
-				updateState(x, y, gameState, active_block);
-				block = getRandom();
-				nextBlock(active_block, block);
-				x = 5;
-				y = 0;
-				y_fine = 0;
-				draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,buffer);
-
-			} else {		
-				draw_blank_matrix((old_x + OFFSET) * TILES,old_y * TILES,active_block,back_buffer);
-				draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,back_buffer);
+		/* drops the active block */
+		if (fall_counter % fall_delay == 0)
+		{
+			/* hit the top of the play area, end game (?) */
+			if(collides(x, y, gameState, active_block)) {
+				sleep(2);
+				silence();
+				gameLoop = FALSE;
 			}
+			old_x = x;
+			old_y = y;
+
+			y_fine++;
+			if((y_fine % 16) == 0) 
+			{
+				state_updated = TRUE;
+				y_fine = 0;
+				y++;
+				/* puts static block in play area and updates state */
+				if (collides(x, y, gameState, active_block) == TRUE) 
+				{
+					y--;
+					updateState(x, y, gameState, active_block);
+					block = getRandom();
+					nextBlock(active_block, block);
+					x = 5;
+					y = 0;
+					y_fine = 0;
+				}
+			}
+			update_row_start = old_y;
+			update_row_end = y + 4;
+			update_col_start = x;
+			update_col_end = x + 4;
 		}
 
-		if (current_buffer == base)
+		if (state_updated)
 		{
-			current_buffer = buffer;
-			back_buffer = base;
+			draw_state(x, y, gameState, active_block, back_buffer, update_row_start, update_row_end, update_col_start, update_col_end);
+		}
+		
+		draw_blank_matrix((old_x + OFFSET) * TILES, old_y * TILES, block, back_buffer);
+		draw_matrix((x + OFFSET) * TILES,y * TILES,block,back_buffer);
 
+		/* checks for the next frame */
+		old_super = Super(0);
+		if (*vsync_counter != current_vsync)
+		{
+			current_vsync = *vsync_counter;
+			Super(old_super);
+
+			/* drop speed. the smaller the delay, the faster the fall */
+			fall_counter++;
+			if (fall_counter >= 500)
+			{
+				if (fall_delay >= 5)
+				{
+					fall_delay--;
+				}
+				fall_counter = 0;
+			}
+
+			/* swaps the current buffer */
+			if (current_buffer == base)
+			{
+				current_buffer = buffer;
+				back_buffer = base;
+			}
+			else
+			{
+				current_buffer = base;
+				back_buffer = buffer;
+			}
+			Setscreen(-1,current_buffer,-1);
+
+			/* updates sound */
+			sound_counter++;
+			if (sound_counter % music_update == 0)
+			{
+				music_counter++;
+				if (music_counter == NUM_CHORDS)
+				{
+					sound_counter = 0;
+					music_counter = 0;
+					/*	imo this is the minimum interval for 
+						the music to sound good */
+					if (music_update > 5)
+					{
+						music_update--;
+					}
+				}
+				play_music(music_counter);
+			}
 		}
 		else
 		{
-			current_buffer = base;
-			back_buffer = buffer;
-		}
-		Setscreen(-1,current_buffer,-1);
-
-		Vsync(); 
-		vsync_counter++;
-		if (vsync_counter % music_update == 0)
-		{
-			music_counter++;
-			if (music_counter == NUM_CHORDS)
-			{
-				vsync_counter = 0;
-				music_counter = 0;
-				/*	imo this is the minimum interval for 
-					the music to sound good */
-				if (music_update > 5)
-				{
-					music_update--;
-				}
-			}
-			play_music(music_counter);
+			Super(old_super);
 		}
 	}
 
@@ -334,6 +401,28 @@ void rot90CW(UBYTE a[N][N])
 		}
 	}
 }
+
+/*	Updates the gameState matrix to reflect the permanent blocks in
+ *	the play area 
+*/
+void draw_state(int x, int y, UBYTE gameState[12][25], UBYTE block[4][4], UWORD *base, int row_start, int row_end, int col_start, int col_end)
+{
+	int i,j;
+	for (i = col_start; i > 1 && i < col_end && i < 12; i++)
+	{
+		for (j = row_start; j > 0 && j <= row_end && j < 25; j++)
+		{
+			if (gameState[i][j] == 0)
+			{
+				draw_blank_block(base, (i * 16) + 200,j * 16);
+			}
+			else
+			{
+				draw_block(base, (i * 16) + 200, j * 16,AND);
+			}
+		}
+	}
+} 
 
 /*	Check if a row has been completed. 
 int rowComplete()

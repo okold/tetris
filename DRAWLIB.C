@@ -25,8 +25,6 @@
 #include "typedef.h"
 #include "fontlib.h"
 
-void draw_blank_block(UWORD *base, int x, int y);
-void draw_block(UWORD *base, int x, int y, short mode);
 void border_block(UWORD *base, int x, int y);
 void draw_score_box(int x, int y, int width, int height);
 
