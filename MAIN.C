@@ -363,10 +363,6 @@ void clearLines(UBYTE gameState[12][25], int y, UWORD *base)
 		}
 
 		if(counter == 10) {
-			/*
-			for(i = 1; i < 11; i++) {
-				gameState[i][j] = 0;
-			} */
 			drop(j, lineNum, gameState);
 			lineNum++;
 			clear_line(j, base); 	/* Visually deletes the completed line */
