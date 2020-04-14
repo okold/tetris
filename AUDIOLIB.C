@@ -7,8 +7,6 @@
 *	Private Functions:	void set_rough(int note)
 *              			-   Sets the rough octave value of the given note.
 *							Should only ever be called within play_music.
-*
-*	TODO:	Sound effects on Channel C.
 */
 #include <osbind.h>
 #include <unistd.h>
@@ -16,6 +14,7 @@
 
 #define CH_A_VOL 10
 #define CH_B_VOL 6
+#define CH_C_VOL 11
 
 /* Notes */
 #define E5 0x0AA
@@ -28,7 +27,7 @@
 #define E3 0x2A7
 #define A3 0x1FC
 #define A3F 0x21B
-
+#define A2F 0x435
 /* Chords
 *	Holds two notes and their volumes.
 */
@@ -124,8 +123,18 @@ void enable_channels()
 {
 	long old_ssp = Super(0);
 
-	*PSG_reg_select = 7;						/* enable channels A and B */
-	*PSG_reg_write  = 0x3C;
+	*PSG_reg_select = 7;						/* enable channels */
+	*PSG_reg_write  = 0x18;                     
+
+	/* sound effect settings */
+	*PSG_reg_select = 4;						/* set channel C fine*/
+	*PSG_reg_write  = A2F;
+
+	*PSG_reg_select = 5;						/* set channel C rough */
+	*PSG_reg_write  = 4;
+
+	*PSG_reg_select = 6;						/* set noise envelope */
+	*PSG_reg_write = 0x0C;
 
 	Super(old_ssp);
 }
@@ -140,7 +149,30 @@ void silence()
 	*PSG_reg_select = 9;						/* set channel B volume */
 	*PSG_reg_write  = 0;
 
+	*PSG_reg_select = 10;						/* set channel C volume */
+	*PSG_reg_write  = 0;
+
 	Super(old_ssp);	
+}
+
+void enable_sound_effect()
+{
+	long old_ssp = Super(0);
+
+	*PSG_reg_select = 10;						/* set channel C volume */
+	*PSG_reg_write  = CH_C_VOL;
+
+	Super(old_ssp);
+}
+
+void disable_sound_effect()
+{
+	long old_ssp = Super(0);
+
+	*PSG_reg_select = 10;						/* set channel C volume */
+	*PSG_reg_write  = 0;
+
+	Super(old_ssp);
 }
 
 void play_music(int index)

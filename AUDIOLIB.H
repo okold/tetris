@@ -15,11 +15,17 @@
 *                       -   Enables sound. Must be run before play_music().
 *
 *                       void silence();
-*                       -   Silences audio.
+*                       -   Silences all audio.
 *
 *                       void play_music(int index);
 *                       -   Plays the chord at the given index.
-*                       -   There are NUM_CHORDS indices in the song. 
+*                       -   There are NUM_CHORDS indices in the song.
+*
+*                       void enable_sound_effect();
+*                       -   Plays the impact sound effect until disabled.
+*
+*                       void disable_sound_effect();
+*                       -   Disables the impact sound effect..
 */
 #ifndef AUDIOLIB_H
 #define AUDIOLIB_H
@@ -29,5 +35,7 @@
 void enable_channels();
 void silence();
 void play_music(int index);
+void enable_sound_effect();
+void disable_sound_effect();
 
 #endif
