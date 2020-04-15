@@ -7,6 +7,11 @@
 *   COMP 2659           Term Project
 *   Winter 2020         Tyson Kendon
 *
+*	Controls:	W: 		Rotate block
+*				A/D: 	Move block left/right
+*				S:		Drop block
+*				Q:		Quit
+*
 *  	Functions:   		void rot90CW(UBYTE a[MATRIX_WIDTH][MATRIX_WIDTH]);
 *							-
 *
@@ -44,7 +49,8 @@
 *							- Adds the given block to the given game state at the
 *							  given position.
 *
-*	TODO:	- Keyboard interrupts
+*	TODO:	- Show controls
+*			- Keyboard interrupts
 *			- Score / display score
 *			- Display next block
 */
@@ -62,7 +68,7 @@
 #include "buffer.h"
 
 #define MATRIX_WIDTH 4
-#define ACCEL_RATE 750
+#define ACCEL_RATE 750		/* speeds up fall speed every # of ticks */
 #define SOUND_EFF_LENGTH 3
 
 void rot90CW(UBYTE a[MATRIX_WIDTH][MATRIX_WIDTH]);
@@ -74,50 +80,53 @@ int clear_lines(UBYTE game_state[12][25], int y, UWORD *base);
 void drop(int start, int stop, UBYTE game_state[12][25]);
 int get_max_height(UBYTE game_state[12][25]);
 void remove_block_from_state(UBYTE game_state[12][25], UBYTE block[4][4], int x, int y);
-void add_block_to_state(UBYTE game_state[12][25], UBYTE block[4][4], int x, int y);
+void add_block_to_state(UBYTE game_state[12][25], UBYTE bloc
 
+/* Built-in vertical blank counter in the Atari ST */
 static volatile long *vsync_counter = 0x462;
 
 int main()
 {
-	long old_super;
-	long current_vsync;
+	/* SYSTEM VARIABLES */
+	long old_super;					/* for Super() call */
+	long current_vsync;				/* to compare to vsync_counter */
+	int game_loop = TRUE;
+	int key;						/* Key press */
+	int i,j;
+
+	/* SOUND VARIABLES */
 	int sound_effect_counter = 0;
 	int sound_counter = 0;
 	int music_counter = 0;
 	int music_update = 6;
-	int game_loop = TRUE;
-	int fall_speed = 1;
-	int acceleration_counter = 0;
 
-	int block;
+	/* ACTIVE BLOCK */
+	UBYTE active_block[4][4];
+	UBYTE old_a_block[4][4]; 	/* For rotation */
+	int block;		/* Integer representation of the block type */		
 	int x = 5;
 	int old_x = 1;
 	int y = 0;
 	int y_fine = 0;
 	int old_y = 0;
-	int key;
-	int i,j;
-	int max_height;
+	int fall_speed = 1;
+	int acceleration_counter = 0;
 
+	/* GAME STATE */
+	UBYTE game_state[12][25];	/* Actual state */
+	UBYTE base_state[12][25];	/* State within graphics 1 */
+	UBYTE buffer_state[12][25]; /* State within graphics 2 */
+	UBYTE *current_state = *base_state;
+	UBYTE *back_state = *buffer_state;
 	int state_update_counter = 0;
 	int clear_line_counter = 0;
+	int max_height;
 
-	UBYTE active_block[4][4];
-	UBYTE old_a_block[4][4];
-	UBYTE game_state[12][25];
-	UBYTE * topState;
-
-	UBYTE base_state[12][25];
-	UBYTE buffer_state[12][25];
-
-
+	/* GRAPHICS BUFFERS */
 	UWORD *buffer = load_buffer();
 	UWORD *base = Physbase();
 	UWORD *current_buffer = base;
 	UWORD *back_buffer = buffer;
-	UBYTE *current_state = *base_state;
-	UBYTE *back_state = *buffer_state;
 
 	/*	Creates an initial 12 x 26 block game state matrix such that the 
 		'perimeter'(Excluding the "top" of the play area) is set to 1, otherwise set to 0. */
@@ -140,15 +149,14 @@ int main()
 	draw_game_start(base);
 	draw_game_start(buffer);
 
-	srand(time(0));			/* Time based RNG. */
+	srand(time(0));			/* generates blocks with time based RNG. */
 	block = getRandom();
 	nextBlock(active_block, block);
 
 	enable_channels();
 	play_music(music_counter); /* plays first note */
 
-	/* inits vsync checker */
-	old_super = Super(0);
+	old_super = Super(0);		/* inits vsync checker */
 	current_vsync = *vsync_counter;
 	Super(old_super);
 
@@ -171,7 +179,7 @@ int main()
 		{	
 			key = read_key();
 
-			if(key == 'a')
+			if(key == 'a') /* Move left */
 			{
 				x -= 1;
 				if (collides(x, y, game_state, active_block) == TRUE) {
@@ -180,7 +188,8 @@ int main()
 					sound_effect_counter = SOUND_EFF_LENGTH;
 				}
 
-			} else if(key == 'd') {
+			} else if(key == 'd') /* Move right */
+			{
 
 				x += 1;
 				if (collides(x, y, game_state, active_block) == TRUE) {
@@ -188,8 +197,8 @@ int main()
 					enable_sound_effect();
 					sound_effect_counter = SOUND_EFF_LENGTH;
 				}
-			} else if(key == 's') {
-
+			} else if(key == 's') /* Drop block */
+			{
 				y += 1;
 				if (collides(x, y, game_state, active_block) == TRUE) {
 					y = old_y;
@@ -214,7 +223,8 @@ int main()
 						}
 					}
 				}
-			} else if(key == 'w') {
+			} else if(key == 'w') /* Rotate block */
+			{
 				copy_matrix(active_block,old_a_block);
 				rot90CW(active_block);
 				if(collides(x, y, game_state, active_block) == TRUE) {
@@ -222,12 +232,14 @@ int main()
 					enable_sound_effect();
 					sound_effect_counter = SOUND_EFF_LENGTH;
 				}
-			} else if(key == 'q') {
+			} else if(key == 'q') /* Quit */
+			{
 
 				goto end;
 			}
 		}
 		
+		/* Accelerates fall speed */
 		acceleration_counter++;
 		if (acceleration_counter % ACCEL_RATE == 0)
 		{
@@ -235,20 +247,25 @@ int main()
 			acceleration_counter = 0;
 		}
 
+		/* Drops the block */
 		y_fine+= fall_speed;
 		if(y_fine >= 16)
 		{
 			y += 1;
 			y_fine = 0;
 
-			if (collides(x, y, game_state, active_block) == TRUE) {
+			/* Collision handling */
+			if (collides(x, y, game_state, active_block) == TRUE) 
+			{
 				y -= 1;
 				updateState(x, y, game_state, active_block);
+
 				max_height = get_max_height(game_state);
 				if (clear_lines(game_state, y, base))
 				{
 					clear_line_counter = 2;
 				}
+
 				block = getRandom();
 				nextBlock(active_block, block);
 				x = 5;
@@ -267,8 +284,11 @@ int main()
 			}
 		}
 
+		/* Movement logic complete, places the block back in the game */
 		add_block_to_state(game_state,active_block,x,y);
 
+		/* Redraws everything if a line has been cleared, otherwise
+		*  redraws only the portion that has changed */
 		if (clear_line_counter > 0)
 		{
 			redraw_state(back_buffer,game_state,max_height);
@@ -279,6 +299,7 @@ int main()
 			draw_updated_state(back_buffer, game_state, back_state);
 		}
 
+		/* Updates things based on the framerate*/
 		old_super = Super(0);
 		if (*vsync_counter != current_vsync)
 		{
