@@ -23,7 +23,7 @@
 #define MATRIX_WIDTH 4
 #define TILES 16
 #define OFFSET 12
-#define ACCEL_RATE 50
+#define ACCEL_RATE 750
 #define SOUND_EFF_LENGTH 3
 
 void rot90CW(UBYTE a[MATRIX_WIDTH][MATRIX_WIDTH]);
@@ -199,10 +199,11 @@ int main()
 		}
 
 		y_fine+= fall_speed;
-		if((y_fine % 16) == 0)
+		if(y_fine >= 16)
 		{
 			y += 1;
-	
+			y_fine = 0;
+
 			if (collides(x, y, game_state, active_block) == TRUE) {
 				y -= 1;
 				updateState(x, y, game_state, active_block);
@@ -215,7 +216,7 @@ int main()
 				nextBlock(active_block, block);
 				x = 5;
 				y = 0;
-				y_fine = 0;
+				
 				enable_sound_effect();
 				sound_effect_counter = SOUND_EFF_LENGTH;
 				if (clear_line_counter < 2)
