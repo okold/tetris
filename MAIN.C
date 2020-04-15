@@ -453,7 +453,9 @@ int get_max_height(UBYTE game_state[12][25])
 	return -1;
 }
 
-void remove_block_from_state(UBYTE game_state[12][25], UBYTE block[4][4], int x, int y)
+/* Removes the given block from the state at the given coordinates */
+void remove_block_from_state(UBYTE game_state[12][25], 
+	UBYTE block[4][4], int x, int y)
 {
 	int i, j;
 	for (i = 0; i < 4; i++)
@@ -468,7 +470,9 @@ void remove_block_from_state(UBYTE game_state[12][25], UBYTE block[4][4], int x,
 	}
 }
 
-void add_block_to_state(UBYTE game_state[12][25], UBYTE block[4][4], int x, int y)
+/* Adds the given block to the state at the given coordinates */
+void add_block_to_state(UBYTE game_state[12][25], 
+	UBYTE block[4][4], int x, int y)
 {
 	int i, j;
 	for (i = 0; i < 4; i++)
