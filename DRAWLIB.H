@@ -38,12 +38,14 @@
 
 #include "typedef.h"
 
+void draw_blank_block(UWORD *base, int x, int y);
+void draw_block(UWORD *base, int x, int y, short mode);
 void draw_matrix(int x, int y, UBYTE matrix[][4], UWORD *base);
 void draw_blank_matrix(int x, int y, UBYTE matrix[][4], UWORD *base);
 void draw_bitmap(UWORD *base, int x, int y,
 				  const UWORD *bitmap, unsigned int height, short mode);
 void disable_cursor();
-void fill_screen(ULONG *base, char pattern);
+void fill_screen(UWORD *base, char pattern);
 void draw_game_start(UWORD *base);
 void clear_line(int y, UWORD *base);
 #endif

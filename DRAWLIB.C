@@ -25,8 +25,6 @@
 #include "typedef.h"
 #include "fontlib.h"
 
-void draw_blank_block(UWORD *base, int x, int y);
-void draw_block(UWORD *base, int x, int y, short mode);
 void border_block(UWORD *base, int x, int y);
 void draw_score_box(int x, int y, int width, int height);
 
@@ -245,12 +243,12 @@ void draw_bitmap(UWORD *base, int x, int y,
 	}
 }
 
-void fill_screen(ULONG *base, char pattern)
+void fill_screen(UWORD *base, char pattern)
 {
 	register int i = 0;
-	register ULONG *loc = base;
+	register UWORD *loc = base;
 
-	while (i++ < BYTES_PER_SCREEN)
+	while (i++ < WORDS_PER_SCREEN)
 		*(loc++) = pattern;
 }
 
