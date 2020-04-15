@@ -14,7 +14,6 @@
 *                       -   Where X = i, j, l, o, s, t, or z.
 *                       -   Generates a tetronimo of the given letter.
 *
-*   TODO: Merge gen_x_block to a gen_block with a char argument
 */
 
 #ifndef BLOCKLIB_H
