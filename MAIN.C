@@ -300,6 +300,7 @@ int main()
 	silence();
 	fill_screen(base, 0);      /* set screen to all white */
 	Setscreen(-1,base,-1);
+	printf("GAME OVER\nThanks for playing!\n");
 	return 0;
 }
 
