@@ -43,7 +43,7 @@ void vsync_wait(int x);
 int clearLines(UBYTE gameState[12][25], int y, UWORD *base);
 void drop(int start, int stop, UBYTE gameState[12][25]);
 void draw_updated_state(UWORD* base, UBYTE gameState[12][25], UBYTE state_to_update[12][25]);
-void redraw_state(UWORD* base, UBYTE gameState[12][25]);
+void redraw_state(UWORD* base, UBYTE gameState[12][25],int max_height);
 int getMaxHeight(UBYTE gameState[12][25]);
 
 static volatile long *vsync_counter = 0x462;
@@ -60,8 +60,7 @@ int main()
 	int fall_delay = 10;
 	int fall_counter = 0;
 
-	int state_updated = 0;
-	int lines_cleared = 0;
+
 
 	int block;
 	int x = 5;
@@ -73,6 +72,16 @@ int main()
 	int i,j;
 	int topStateStart,topStateEnd,anchor;
 	int maxHeight;
+
+	int state_update_counter = 0;
+	int block_update_counter = 0;
+	int block_rotate_counter = 0;
+	int clear_line_counter = 0; /* not actually the lines cleared, but a counter */
+
+	int x_snapshot;
+	int y_snapshot;
+	int x_old_snapshot;
+	int y_old_snapshot;
 
 	UBYTE active_block[4][4];
 	UBYTE old_aBlock[4][4];
@@ -125,6 +134,7 @@ int main()
 
 	while (gameLoop == TRUE)    
 	{
+		/* reached the top of the play area, stop */
 		if(collides(x, y, gameState, active_block)) {
 			silence();
 			sleep(2);
@@ -145,8 +155,11 @@ int main()
 					enable_sound_effect();
 					sound_effect_counter = sound_effect_length;
 				} else {
-					draw_blank_matrix((old_x + OFFSET) * TILES,y * TILES,active_block,base);
-					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,base);
+					block_update_counter = 2;
+					x_snapshot = x;
+					x_old_snapshot = old_x;
+					y_snapshot = y;
+					y_old_snapshot = old_y;
 				}
 
 			} else if(key == 'd') {
@@ -157,8 +170,11 @@ int main()
 					enable_sound_effect();
 					sound_effect_counter = sound_effect_length;
 				} else {
-					draw_blank_matrix((old_x + OFFSET) * TILES,y * TILES,active_block,base);
-					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,base);
+					block_update_counter = 2;
+					x_snapshot = x;
+					x_old_snapshot = old_x;
+					y_snapshot = y;
+					y_old_snapshot = old_y;
 				}
 			} else if(key == 's') {
 
@@ -166,8 +182,11 @@ int main()
 				if (collides(x, y, gameState, active_block) == TRUE) {
 					y = old_y;
 					updateState(x, y, gameState, active_block);
-					clearLines(gameState, y, base);
 					maxHeight = getMaxHeight(gameState);
+					if (clearLines(gameState, y, base))
+					{
+						clear_line_counter = 2;
+					}
 					block = getRandom();
 					nextBlock(active_block, block);
 					x = 5;
@@ -175,10 +194,21 @@ int main()
 					y_fine = 0;
 					enable_sound_effect();
 					sound_effect_counter = sound_effect_length;
-					state_updated = 2;
-				} else {
-					draw_blank_matrix((x + OFFSET) * TILES,old_y * TILES,active_block,base);
-					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,base);
+					if (clear_line_counter < 2)
+					{
+						if (state_update_counter == 0)
+						{
+							state_update_counter = 2;
+						}
+					}
+				}
+				else 
+				{
+					block_update_counter = 2;
+					x_snapshot = x;
+					x_old_snapshot = old_x;
+					y_snapshot = y;
+					y_old_snapshot = old_y;
 				}
 			} else if(key == 'w') {
 				copy_matrix(active_block,old_aBlock);
@@ -188,9 +218,14 @@ int main()
 					enable_sound_effect();
 					sound_effect_counter = sound_effect_length;
 				} else {
-					
-					draw_blank_matrix((x + OFFSET) * TILES,y * TILES,old_aBlock,base);
-					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,base);
+					if (block_rotate_counter == 0)
+					{
+						block_rotate_counter = 2;
+						x_snapshot = x;
+						x_old_snapshot = old_x;
+						y_snapshot = y;
+						y_old_snapshot = old_y;
+					}
 				}
 				
 			} else if(key == 'q') {
@@ -211,8 +246,11 @@ int main()
 				if (collides(x, y, gameState, active_block) == TRUE) {
 					y -= 1;
 					updateState(x, y, gameState, active_block);
-					clearLines(gameState, y, base);
 					maxHeight = getMaxHeight(gameState);
+					if (clearLines(gameState, y, base))
+					{
+						clear_line_counter = 2;
+					}
 					block = getRandom();
 					nextBlock(active_block, block);
 					x = 5;
@@ -220,19 +258,50 @@ int main()
 					y_fine = 0;
 					enable_sound_effect();
 					sound_effect_counter = sound_effect_length;
-					state_updated = 2;
+					if (clear_line_counter < 2)
+					{
+						if (state_update_counter == 0)
+						{
+							state_update_counter = 2;
+						}
+					}
 
-				} else {		
-					draw_blank_matrix((old_x + OFFSET) * TILES,old_y * TILES,active_block,base);
-					draw_matrix((x + OFFSET) * TILES,y * TILES,active_block,base);
+				} 
+				else
+				{
+					block_update_counter = 2;
+					x_snapshot = x;
+					x_old_snapshot = old_x;
+					y_snapshot = y;
+					y_old_snapshot = old_y;
 				}
 			}
 		}
 
-		if (state_updated > 0)
+		if (block_rotate_counter > 0)
 		{
-			redraw_state(back_buffer,gameState);
-			state_updated--;
+			draw_blank_matrix((x_old_snapshot + OFFSET) * TILES,y_old_snapshot * TILES,old_aBlock,back_buffer);
+			draw_matrix((x_snapshot + OFFSET) * TILES,y_snapshot * TILES,active_block,back_buffer);
+			block_rotate_counter--;
+		}
+
+		if (block_update_counter > 0)
+		{
+			draw_blank_matrix((x_old_snapshot + OFFSET) * TILES,y_old_snapshot * TILES,active_block,back_buffer);
+			draw_matrix((x_snapshot + OFFSET) * TILES,y_snapshot * TILES,active_block,back_buffer);
+			block_update_counter--;
+		}
+
+		if (clear_line_counter > 0)
+		{
+			redraw_state(back_buffer,gameState,maxHeight);
+			clear_line_counter--;
+		}
+
+		if (state_update_counter > 0)
+		{
+			draw_updated_state(back_buffer, gameState, back_state);
+			state_update_counter--;
 		}
 
 
@@ -301,7 +370,6 @@ int main()
 	fill_screen(base, 0);      /* set screen to all white */
 	Setscreen(-1,base,-1);
 	printState(gameState);
-	printf("Current height: %d\n", maxHeight);
 	return 0;
 }
 
@@ -500,12 +568,12 @@ void draw_updated_state(UWORD* base, UBYTE gameState[12][25], UBYTE state_to_upd
 	}
 }
 
-void redraw_state(UWORD* base, UBYTE gameState[12][25])
+void redraw_state(UWORD* base, UBYTE gameState[12][25],int max_height)
 {
 	int i,j;
 	for(i = 1; i < 11; i++)
 	{
-		for (j = 0; j < 24; j++)
+		for (j = max_height; j < 24; j++)
 		{
 			if (gameState[i][j] == 0)
 			{
