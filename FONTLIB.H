@@ -3,6 +3,9 @@
 *   Colton Paquette		cpaqu904@mtroyal.ca
 *   COMP 2659           Term Project
 *   Winter 2020         Tyson Kendon
+*
+*   Includes public functions to draw each character
+*   within the font library.
 */
 #ifndef FONTLIB_H
 #define FONTLIB_H
