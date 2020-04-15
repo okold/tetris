@@ -6,6 +6,47 @@
 *   Colton Paquette		cpaqu904@mtroyal.ca
 *   COMP 2659           Term Project
 *   Winter 2020         Tyson Kendon
+*
+*  	Functions:   		void rot90CW(UBYTE a[MATRIX_WIDTH][MATRIX_WIDTH]);
+*							-
+*
+*						void nextBlock (UBYTE active_block[4][4], int block);
+*							-
+*
+*						void updateState(int x, int y, UBYTE game_state[12][25], 
+*								UBYTE block[4][4]);
+*							-
+*
+*						int collides(int x, int y, UBYTE game_state[12][25],
+*								UBYTE block[4][4]);
+*							-
+*
+*						int getRandom();
+*							-
+*
+*						int clear_lines(UBYTE game_state[12][25], int y, UWORD *base);
+*							-
+*
+*						void drop(int start, int stop, UBYTE game_state[12][25]);
+*							-
+*
+*						int get_max_height(UBYTE game_state[12][25]);
+*							- Returns the y position of the highest block in the
+*							  given game state.
+*
+*						void remove_block_from_state(UBYTE game_state[12][25], 
+*								UBYTE block[4][4], int x, int y);
+*							- Removes the given block from the given from the given
+*							  game state at the given position.
+*
+*						void add_block_to_state(UBYTE game_state[12][25], 
+*								UBYTE block[4][4], int x, int y);
+*							- Adds the given block to the given game state at the
+*							  given position.
+*
+*	TODO:	- Keyboard interrupts
+*			- Score / display score
+*			- Display next block
 */
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,10 +70,8 @@ void nextBlock (UBYTE active_block[4][4], int block);
 void updateState(int x, int y, UBYTE game_state[12][25], UBYTE block[4][4]);
 int collides(int x, int y, UBYTE game_state[12][25], UBYTE block[4][4]);
 int getRandom();
-void vsync_wait(int x);
 int clear_lines(UBYTE game_state[12][25], int y, UWORD *base);
 void drop(int start, int stop, UBYTE game_state[12][25]);
-
 int get_max_height(UBYTE game_state[12][25]);
 void remove_block_from_state(UBYTE game_state[12][25], UBYTE block[4][4], int x, int y);
 void add_block_to_state(UBYTE game_state[12][25], UBYTE block[4][4], int x, int y);
