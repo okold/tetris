@@ -5,11 +5,7 @@
 *   COMP 2659           Term Project
 *   Winter 2020         Tyson Kendon
 *
-*	Private Functions:	void draw_bitmap(UWORD *base, int x, int y,
-*				  			const UWORD *bitmap, unsigned int height, short mode);
-*						-	Draws a bitmap at the given base.
-*
-*						void draw_block(UWORD *base, int x, int y, short mode);
+*	Private Functions:	void draw_block(UWORD *base, int x, int y, short mode);
 *                       -   Draws a block in Style 1.	
 *
 *						void draw_border_block(UWORD *base, int x, int y);
@@ -89,8 +85,6 @@ static const UWORD black_bitmap[16] =
 	0xFFFF
 };
 
-void draw_bitmap(UWORD *base, int x, int y,
-				  const UWORD *bitmap, unsigned int height, short mode);
 void draw_border_block(UWORD *base, int x, int y);
 void draw_blank_block(UWORD *base, int x, int y);
 void draw_block(UWORD *base, int x, int y, short mode);

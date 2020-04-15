@@ -27,6 +27,10 @@
 *
 *                       void draw_game_start(UWORD *base);
 *                       -   Draws the gameplay area border.
+*						
+*						void draw_bitmap(UWORD *base, int x, int y,
+*				  			const UWORD *bitmap, unsigned int height, short mode);
+*						-	Draws a bitmap at the given base.
 */
 
 #ifndef DRAWLIB_H
@@ -41,4 +45,6 @@ void redraw_state(UWORD* base, UBYTE game_state[12][25],
 void disable_cursor();
 void fill_screen(UWORD *base, char pattern);
 void draw_game_start(UWORD *base);
+void draw_bitmap(UWORD *base, int x, int y,
+				  const UWORD *bitmap, unsigned int height, short mode);
 #endif
