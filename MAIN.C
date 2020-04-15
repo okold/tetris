@@ -13,27 +13,31 @@
 *				Q:		Quit
 *
 *  	Functions:   		void rot90CW(UBYTE a[MATRIX_WIDTH][MATRIX_WIDTH]);
-*							-
+*							- Rotates the the provided matrix 90 degrees clock wise
 *
 *						void nextBlock (UBYTE active_block[4][4], int block);
-*							-
+*							- Redraws the active block to represent the new 
+*							  provided one instead.
 *
 *						void updateState(int x, int y, UBYTE game_state[12][25], 
 *								UBYTE block[4][4]);
-*							-
+*							- Updates the game state by adding the given block
+*							  at the provided x,y coordinate.
 *
 *						int collides(int x, int y, UBYTE game_state[12][25],
 *								UBYTE block[4][4]);
-*							-
+*							- Checks if the blocks recent movement cause a collision
+*							  with walls or other blocks.
 *
 *						int getRandom();
-*							-
+*							- Returns a random interger between 1 and 7(inclusive).
 *
 *						int clear_lines(UBYTE game_state[12][25], int y, UWORD *base);
-*							-
+*							- Clears completes lines and drops all blocks above
+*							  the cleared lines.
 *
 *						void drop(int start, int stop, UBYTE game_state[12][25]);
-*							-
+*							- Lowers each line by one and clears the final remaining line.
 *
 *						int get_max_height(UBYTE game_state[12][25]);
 *							- Returns the y position of the highest block in the
@@ -53,6 +57,8 @@
 *			- Keyboard interrupts
 *			- Score / display score
 *			- Display next block
+*			- Start menu
+*			- Game Over screen
 */
 #include <stdio.h>
 #include <stdlib.h>
