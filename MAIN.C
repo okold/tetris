@@ -209,16 +209,20 @@ int main()
 				if (collides(x, y, game_state, active_block) == TRUE) {
 					y = old_y;
 					updateState(x, y, game_state, active_block);
+
 					max_height = get_max_height(game_state);
 					if (clear_lines(game_state, y, base))
 					{
 						clear_line_counter = 2;
 					}
+
 					block = getRandom();
 					nextBlock(active_block, block);
 					x = 5;
 					y = 0;
+
 					y_fine = 0;
+					
 					enable_sound_effect();
 					sound_effect_counter = SOUND_EFF_LENGTH;
 					if (clear_line_counter < 2)
