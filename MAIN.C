@@ -115,15 +115,16 @@ int main()
 
 	while (game_loop == TRUE)    
 	{
-		
+		remove_block_from_state(game_state,active_block,x,y);
+
 		old_x = x;
 		old_y = y;
-		remove_block_from_state(game_state,active_block,old_x,old_y);
-		
-		if(collides(x, y, game_state, active_block)) 
+
+		/* check for top of play area collision */
+		if(y == 0 && collides(x, y + 1, game_state, active_block)) 
 		{
 			silence();
-			sleep(2);
+			sleep(1);
 			game_loop = FALSE;
 		}
 
