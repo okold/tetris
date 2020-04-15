@@ -1,11 +1,8 @@
 /* BLOCKLIB.C
 *
 *   Olga Koldachenko	okold525@mtroyal.ca
-*   COMP 2659           Assignment 2
+*   COMP 2659           Term Project
 *   Winter 2020         Tyson Kendon
-*
-*	Private Functions:	void copy_matrix(UBYTE src[][4], UBYTE dst[][4]);
-*              			-   Copies the source matrix into the destination.
 */
 #include "blocklib.h"
 
@@ -55,6 +52,30 @@ static UBYTE z_block[4][4] = {
     {0, 0, 1, 0},
     {0, 0, 0, 0}};
 
+/* Copies the first matrix into the second.
+*  Must be a 4x4 matrix.
+*/
+void copy_matrix(UBYTE src[][4], UBYTE dst[][4])
+{
+    int i, j;
+
+    for (i = 0; i < 4; i++)
+    {
+        for (j = 0; j < 4; j++)
+        {
+            if (i == 1)
+            {
+                dst[i][j] = src[i][j];
+            }
+            else
+            {
+                dst[i][j] = src[i][j];
+            }
+        }
+    }
+}
+
+/* Block generation functions */
 void gen_i_block(UBYTE matrix[][4])
 {
     copy_matrix(i_block,matrix);
@@ -88,24 +109,4 @@ void gen_t_block(UBYTE matrix[][4])
 void gen_z_block(UBYTE matrix[][4])
 {
     copy_matrix(z_block,matrix);
-}
-
-void copy_matrix(UBYTE src[][4], UBYTE dst[][4])
-{
-    int i, j;
-
-    for (i = 0; i < 4; i++)
-    {
-        for (j = 0; j < 4; j++)
-        {
-            if (i == 1)
-            {
-                dst[i][j] = src[i][j];
-            }
-            else
-            {
-                dst[i][j] = src[i][j];
-            }
-        }
-    }
 }

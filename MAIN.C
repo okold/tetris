@@ -3,8 +3,8 @@
 *	TETRIS for the Atari ST
 *
 *   Olga Koldachenko	okold525@mtroyal.ca
-*	Colton Paquette		cpaqu904@mtroyal.ca
-*   COMP 2659           Assignment 2
+*   Colton Paquette		cpaqu904@mtroyal.ca
+*   COMP 2659           Term Project
 *   Winter 2020         Tyson Kendon
 */
 #include <stdio.h>
@@ -21,8 +21,6 @@
 #include "buffer.h"
 
 #define MATRIX_WIDTH 4
-#define TILES 16
-#define OFFSET 12
 #define ACCEL_RATE 750
 #define SOUND_EFF_LENGTH 3
 
@@ -34,8 +32,7 @@ int getRandom();
 void vsync_wait(int x);
 int clear_lines(UBYTE game_state[12][25], int y, UWORD *base);
 void drop(int start, int stop, UBYTE game_state[12][25]);
-void draw_updated_state(UWORD* base, UBYTE game_state[12][25], UBYTE state_to_update[12][25]);
-void redraw_state(UWORD* base, UBYTE game_state[12][25],int max_height);
+
 int get_max_height(UBYTE game_state[12][25]);
 void remove_block_from_state(UBYTE game_state[12][25], UBYTE block[4][4], int x, int y);
 void add_block_to_state(UBYTE game_state[12][25], UBYTE block[4][4], int x, int y);
@@ -322,15 +319,6 @@ int collides(int x, int y, UBYTE game_state[12][25], UBYTE block[4][4])
 	return 0;
 }
 
-void vsync_wait(int x)
-{
-	int i;
-	for (i = 0; i < x; i++)
-	{
-		Vsync();
-	}
-}
-
 /*	Updates the game_state matrix to reflect the permanent blocks in
 * 	the play area 
 */
@@ -463,48 +451,6 @@ int get_max_height(UBYTE game_state[12][25])
 	}
 	/* Possibly return -1 or 23 (lowest line) if no blocks exist*/
 	return -1;
-}
-
-void draw_updated_state(UWORD* base, UBYTE game_state[12][25], UBYTE state_to_update[12][25])
-{
-	int i,j;
-	for(i = 1; i < 11; i++)
-	{
-		for (j = 0; j < 24; j++)
-		{
-			if (state_to_update[i][j] != game_state[i][j])
-			{
-				state_to_update[i][j] = game_state[i][j];
-				if (state_to_update[i][j] == 0)
-				{
-					draw_blank_block(base, (i + OFFSET) * TILES, j * TILES);
-				}
-				else
-				{
-					draw_block(base, (i + OFFSET) * TILES, j * TILES,AND);	
-				}
-			}
-		}
-	}
-}
-
-void redraw_state(UWORD* base, UBYTE game_state[12][25],int max_height)
-{
-	int i,j;
-	for(i = 1; i < 11; i++)
-	{
-		for (j = max_height; j < 24; j++)
-		{
-			if (game_state[i][j] == 0)
-			{
-				draw_blank_block(base, (i + OFFSET) * TILES, j * TILES);
-			}
-			else
-			{
-				draw_block(base, (i + OFFSET) * TILES, j * TILES,AND);	
-			}
-		}
-	}
 }
 
 void remove_block_from_state(UBYTE game_state[12][25], UBYTE block[4][4], int x, int y)

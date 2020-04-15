@@ -1,7 +1,7 @@
 /* AUDIOLIB.H
 *
 *   Olga Koldachenko	okold525@mtroyal.ca
-*   COMP 2659           Assignment 2
+*   COMP 2659           Term Project
 *   Winter 2020         Tyson Kendon
 *
 *   Purpose:    Handles all audio.

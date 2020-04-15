@@ -1,7 +1,7 @@
 /* INPUT.C
 *
-*	Colton Paquette		cpaqu904@mtroyal.ca
-*   COMP 2659           Assignment 2
+*   Colton Paquette		cpaqu904@mtroyal.ca
+*   COMP 2659           Term Project
 *   Winter 2020         Tyson Kendon
 */
 #include "input.h"

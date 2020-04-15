@@ -1,3 +1,9 @@
+; BUFFER.S
+;
+;	Olga Koldachenko	okold525@mtroyal.ca
+;   COMP 2659           Term Project
+;   Winter 2020         Tyson Kendon
+;
 ; UWORD* load_buffer()
 ;
 ; Loads a 256-byte aligned address for a secondary screen buffer.

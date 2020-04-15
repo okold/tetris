@@ -25,7 +25,7 @@ audiolib.o: audiolib.c audiolib.h
 input.o: input.c input.h
 	$(CC) -g -c input.c
 
-buffer.o: buffer.s
+buffer.o: buffer.s buffer.h
 	gen -D -L2 buffer.s
 
 clean:

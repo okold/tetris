@@ -1,7 +1,7 @@
 /* AUDIOLIB.C
 *
 *   Olga Koldachenko	okold525@mtroyal.ca
-*   COMP 2659           Assignment 2
+*   COMP 2659           Term Project
 *   Winter 2020         Tyson Kendon
 *
 *	Private Functions:	void set_rough(int note)
@@ -28,8 +28,9 @@
 #define A3 0x1FC
 #define A3F 0x21B
 #define A2F 0x435
+
 /* Chords
-*	Holds two notes and their volumes.
+*  Holds two notes and their volumes.
 */
 typedef struct {
 	int note_a;
@@ -63,7 +64,7 @@ static Chord  X_E4 = {A4,E4,0,CH_B_VOL};
 static Chord  X_E3 = {A4,E3,0,CH_B_VOL};
 
 /* Music
-*	Each index in the array represents half a beat.
+*  Each index in the array represents half a beat.
 */
 static Chord *music[NUM_CHORDS] =
 	{&E5_E3,  &E5_E4, &E5_E3,  &E5_E4, &E5_E3,  &E5_E4, &E5_E3,  &E5_E4,
@@ -119,6 +120,7 @@ void set_rough(int note);
 static volatile char *PSG_reg_select = 0xFF8800;
 static volatile char *PSG_reg_write  = 0xFF8802;
 
+/* Primes the game for music */
 void enable_channels()
 {
 	long old_ssp = Super(0);
@@ -139,6 +141,7 @@ void enable_channels()
 	Super(old_ssp);
 }
 
+/* Silences all audio */
 void silence()
 {
 	long old_ssp = Super(0);
@@ -155,6 +158,7 @@ void silence()
 	Super(old_ssp);	
 }
 
+/* Turns on the impact sound */
 void enable_sound_effect()
 {
 	long old_ssp = Super(0);
@@ -165,6 +169,7 @@ void enable_sound_effect()
 	Super(old_ssp);
 }
 
+/* Turns off the impact sound */
 void disable_sound_effect()
 {
 	long old_ssp = Super(0);
@@ -175,6 +180,7 @@ void disable_sound_effect()
 	Super(old_ssp);
 }
 
+/* Plays the chord at the given index */
 void play_music(int index)
 {
 	long old_ssp = Super(0);
@@ -200,6 +206,11 @@ void play_music(int index)
 	Super(old_ssp);
 }
 
+/* Sets the rough value of the given note.
+*  Could be made smarter, by doing math on the note's value,
+*  however only two rough values are used in the music.
+*  So... meh.
+*/
 void set_rough(int note)
 {
 	if (note >= 0x200)

@@ -6,7 +6,11 @@
 *
 *   Purpose:    Handles all Tetronimo procedures.
 *
-*   Public Functions:   gen_X_block(UBYTE matrix[][4]);
+*   Public Functions:   void copy_matrix(UBYTE src[][4], UBYTE dst[][4]);
+*              			-   Copies the source matrix into the destination.
+*                       -   MUST be a 4x4 matrix!
+*
+*                       void gen_X_block(UBYTE matrix[][4]);
 *                       -   Where X = i, j, l, o, s, t, or z.
 *                       -   Generates a tetronimo of the given letter.
 *
