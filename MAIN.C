@@ -86,7 +86,7 @@ int clear_lines(UBYTE game_state[12][25], int y, UWORD *base);
 void drop(int start, int stop, UBYTE game_state[12][25]);
 int get_max_height(UBYTE game_state[12][25]);
 void remove_block_from_state(UBYTE game_state[12][25], UBYTE block[4][4], int x, int y);
-void add_block_to_state(UBYTE game_state[12][25], UBYTE bloc
+void add_block_to_state(UBYTE game_state[12][25], UBYTE block[4][4], int x, int y);
 
 /* Built-in vertical blank counter in the Atari ST */
 static volatile long *vsync_counter = 0x462;
@@ -222,7 +222,7 @@ int main()
 					y = 0;
 
 					y_fine = 0;
-					
+
 					enable_sound_effect();
 					sound_effect_counter = SOUND_EFF_LENGTH;
 					if (clear_line_counter < 2)
